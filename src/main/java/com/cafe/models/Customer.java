@@ -1,9 +1,9 @@
 package com.cafe.models;
 
-public class Customer { // every customer we create will be an instance of this Customer class definition
+public abstract class Customer { // this is the customer base class
     private String name;
     private Drinks order;
-    private int patience;
+    protected int patience; // so subclasses can access it too (we have AngryCustomer and wantsExtraSugarCustomer)
     private int maxPatience;
 
     public String getName(){
