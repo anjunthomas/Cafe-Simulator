@@ -19,11 +19,12 @@ public  class Ingredient {
 
     // refill button should be greyed out until the ingredient is empty
     public void refill() {
+
         this.currentAmount = this.maxAmount;
     }
 
-    public boolean isEmpty(int currentAmount){
-        return this.currentAmount < 0;
+    public boolean isEmpty(){
+        return this.currentAmount <= 0;
     }
 
     public void use(){
@@ -32,11 +33,15 @@ public  class Ingredient {
     }
 
     public String getImagePath() {
-        return "Hello";
+        if (this.currentAmount > 0) {
+            return this.fullImagePath;
+        } else {
+            return this.emptyImagePath;
+        }
     }
 
     public int getCurrentAmount() {
-        return 1;
+        return this.currentAmount;
     }
 
 }
