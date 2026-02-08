@@ -1,10 +1,10 @@
 package com.cafe.models;
 
-public abstract class Drinks {
+public abstract class Drink {
     String drinkName;
     String recipe;
 
-    public Drinks(String drinkName, String recipe){
+    public Drink(String drinkName, String recipe){
         this.drinkName = drinkName;
         this.recipe = recipe;
     }
