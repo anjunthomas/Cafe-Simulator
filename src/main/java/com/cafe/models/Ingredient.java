@@ -1,3 +1,5 @@
+//Ingredients Class
+
 package com.cafe.models;
 
 public  class Ingredient {
@@ -24,12 +26,18 @@ public  class Ingredient {
     }
 
     public boolean isEmpty(){
-        return this.currentAmount <= 0;
+        return this.currentAmount <= 0;  //Check if the ingredient is 0 or backup case: less than Zero
     }
 
     public void use(){
         this.currentAmount --;
-        //Boolean empty = isEmpty();
+        //Call Empty function to check if ingredient is emp
+        Boolean empty = isEmpty();
+        
+    //Future Implementation: Check if empty variable is negative and print error message
+      //  if(empty < 0){
+            
+      //  }
     }
 
     public String getImagePath() {
@@ -42,6 +50,10 @@ public  class Ingredient {
 
     public int getCurrentAmount() {
         return this.currentAmount;
+    }
+
+    public String getName(){
+        return name;
     }
 
 }

@@ -1,19 +1,26 @@
 package com.cafe.models;
 
-public abstract class Drinks {
-    String name;
-    String recipe;
+public class Drink{
+    //Create Private Variables for Drinks
+    private String drinkName;
+    private String Recipe;
 
-    public Drinks(String name, String recipe){
-        this.name = name;
-        this.recipe = recipe;
+    public Drink(String drinkName, String Recipe){
+        this.drinkName = drinkName;
+        this.Recipe = Recipe;
     }
 
-    public String recipe() {
+   //Set Getters to Get Recipe and Name
+    public String getRecipe() {
 
         return recipe;
     }
     public String getName() {
-        return name ;
+
+        return drinkName;
     }
 }
+
+//Drink Coffee = new Drink("name", "Recipe");
+//Drink Latte = new Drink("name", "Recipe");
+//Drink Matcha = new Drink("name", "Recipe");
