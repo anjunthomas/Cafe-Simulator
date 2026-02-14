@@ -29,15 +29,12 @@ public  class Ingredient {
         return this.currentAmount <= 0;  //Check if the ingredient is 0 or backup case: less than Zero
     }
 
-    public void use(){
-        this.currentAmount --;
-        //Call Empty function to check if ingredient is emp
-        Boolean empty = isEmpty();
-        
-    //Future Implementation: Check if empty variable is negative and print error message
-      //  if(empty < 0){
-            
-      //  }
+    public boolean use() {
+        if (this.currentAmount > 0) {
+            this.currentAmount--;
+            return true;
+        }
+        return false;
     }
 
     public String getImagePath() {
