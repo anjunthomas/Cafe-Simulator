@@ -32,8 +32,10 @@ public Boolean getCheckOrder(){
 
 //Checks if order is Complete
 public boolean isComplete(){
-    return this.checkOrder = true;
+    return this.checkOrder;
 }
 
-
+public void complete(){
+    this.checkOrder = true;
+  }
 }
