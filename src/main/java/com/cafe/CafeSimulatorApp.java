@@ -30,8 +30,7 @@ public class CafeSimulatorApp extends Application {
 
         ImageView backgroundView = new ImageView(background);
 
-        FileInputStream coffee1 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\coffeebeans.png");
-        Image coffee_full = new Image(coffee1);
+        Image coffee_full = ImageLoader.load("coffeebeans.png");
 
         ImageView coffee = new ImageView(coffee_full);
 
@@ -89,10 +88,8 @@ public class CafeSimulatorApp extends Application {
             timeline.play();
         });
 
-        FileInputStream milk1 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\milk.png");
-        Image milk_full = new Image(milk1);
-        FileInputStream milk2 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\milk2.png");
-        Image milk_hover = new Image(milk2);
+        Image milk_full = ImageLoader.load("milk.png");
+        Image milk_hover = ImageLoader.load("milk2.png");
         ImageView milk = new ImageView(milk_full);
 
 
@@ -102,10 +99,8 @@ public class CafeSimulatorApp extends Application {
         milk.setTranslateX(-130);
         milk.setTranslateY(-40);
 
-        FileInputStream sugar1 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\SugarBowl.png");
-        Image sugar_full = new Image(sugar1);
-        FileInputStream sugar2 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\SugarBowl2.png");
-        Image sugar_hover = new Image(sugar2);
+        Image sugar_full = ImageLoader.load("SugarBowl.png");
+        Image sugar_hover = ImageLoader.load("SugarBowl2.png");
         ImageView sugar = new ImageView(sugar_full);
 
 
@@ -115,10 +110,8 @@ public class CafeSimulatorApp extends Application {
         sugar.setTranslateX(-240);
         sugar.setTranslateY(35);
 
-        FileInputStream cups1 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\Cups_rack.png");
-        Image cups_stack = new Image(cups1);
-        FileInputStream cups2 = new FileInputStream("C:\\Users\\salma\\OneDrive\\Documents\\GitHub\\Cafe-Simulator\\src\\main\\resources\\images\\Cups_rack2.png");
-        Image cups_hover = new Image(cups2);
+        Image cups_stack = ImageLoader.load("Cups_rack.png");
+        Image cups_hover = ImageLoader.load("Cups_rack2.png");
         ImageView cups = new ImageView(cups_stack);
 
 

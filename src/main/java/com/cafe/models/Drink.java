@@ -10,11 +10,7 @@ public class Drink{
         this.Recipe = Recipe;
     }
 
-   //Set Getters to Get Recipe and Name
-    public String getRecipe() {
 
-        return recipe;
-    }
     public String getName() {
 
         return drinkName;
