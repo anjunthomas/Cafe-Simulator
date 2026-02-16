@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class InventoryManager {
     private HashMap<String, Ingredient> ingredients;
 
-    InventoryManager(){
+    public InventoryManager(){
         this.ingredients = new HashMap <>();
         initialize();
     }
@@ -19,5 +19,27 @@ public class InventoryManager {
         ingredients.put("sugar", new Ingredient("sugar", 10, "SugarBowl.png", "SugarBowl2.png"));
     }
 
+    public boolean useIngredient(String name){
+        Ingredient ingredient = ingredients.get(name);
+        if(ingredient == null){
+            return false;
+        }
+        return ingredient.use(); // returning whether the operation was successful
+    }
+
+    public void refillIngredient(String name){
+        Ingredient ingredient = ingredients.get(name);
+        if(ingredient != null){
+            ingredient.refill();
+        }
+    }
+
+    public boolean hasIngredient(String name){
+        Ingredient ingredient = ingredients.get(name);
+        if(ingredient == null){
+            return false;
+        }
+        return !ingredient.isEmpty(); // true will be when the ingredient isn't empty, so we're returning false when it is
+    }
 
 }
