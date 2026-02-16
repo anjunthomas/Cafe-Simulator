@@ -1,41 +1,36 @@
 //Keep track of Orders
 //Connect customer with Order (Drink) - Inventory Manager
-
 package com.cafe.models;
 
-public class Orders{
+public class Order{
+    private Drink orderedDrink;
+    private Customer customer;
+    private Boolean checkOrder;
 
-private Drinks order;
-private Customer customer;
-private Boolean checkOrder;
+    public Order(Customer customer, Drink orderedDrink){
+        this.checkOrder = false;
+        this.customer = customer;
+        this.orderedDrink = orderedDrink;
+    }
 
-
-public order(Customer customer, Drinks order){
-    //Orders obj = new Orders(); Where should I create the new object?
-    this.checkOrder = false;
-    this.customer = customer;
-    this.order = order;
-
-}
-
-public Customer getCustomer() {
+    public Customer getCustomer() {
         return this.customer;
     }
 
-public Drinks getOrder() {
-        return this.order;
+    public Drink getOrder() {
+        return this.orderedDrink;
     }
 
-public Boolean getCheckOrder(){
-    return this.checkOrder;
-}
+    public Boolean getCheckOrder(){
+        return this.checkOrder;
+    }
 
-//Checks if order is Complete
-public boolean isComplete(){
-    return this.checkOrder;
-}
+    //Checks if order is Complete
+    public boolean isComplete(){
+        return this.checkOrder;
+    }
 
-public void complete(){
-    this.checkOrder = true;
-  }
+    public void complete(){
+        this.checkOrder = true;
+    }
 }

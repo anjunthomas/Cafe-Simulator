@@ -2,7 +2,7 @@ package com.cafe.models;
 
 public abstract class Customer { // this is the customer base class
     private String name;
-    private Drinks order;
+    private Drink order;
     protected int patience; // so subclasses can access it too (we have AngryCustomer and wantsExtraSugarCustomer)
     private int maxPatience;
     private String spritePath;
@@ -11,7 +11,7 @@ public abstract class Customer { // this is the customer base class
         return this.name;
     }
 
-    public Drinks getOrder() { // to let other classes read this data, (getter), necessary since the class attributes are private
+    public Drink getOrder() { // to let other classes read this data, (getter), necessary since the class attributes are private
         return this.order;
     }
 
@@ -19,7 +19,7 @@ public abstract class Customer { // this is the customer base class
         return this.spritePath;
     }
 
-    public void setOrder(Drinks order){ // this is a setter to let you write and change the order
+    public void setOrder(Drink order){ // this is a setter to let you write and change the order
         this.order = order;
     }
 
@@ -36,6 +36,10 @@ public abstract class Customer { // this is the customer base class
         this.maxPatience = maxPatience;
         this.patience = maxPatience;
         this.spritePath = spritePath;
+    }
+
+    public void setPatience(int patience){
+        this.patience = patience;
     }
 
     public void decreasePatience(){

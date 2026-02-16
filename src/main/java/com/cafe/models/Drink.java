@@ -3,21 +3,21 @@ package com.cafe.models;
 public class Drink{
     //Create Private Variables for Drinks
     private String drinkName;
-    private String Recipe;
+    private String recipe;
 
-    public Drink(String drinkName, String Recipe){
+    public Drink(String drinkName, String recipe){
         this.drinkName = drinkName;
-        this.Recipe = Recipe;
+        this.recipe = recipe;
     }
 
-   //Set Getters to Get Recipe and Name
-    public String getRecipe() {
+
+    public String getName() {
+        return drinkName;
+    }
+
+    public String getRecipe(){
 
         return recipe;
-    }
-    public String getName() {
-
-        return drinkName;
     }
 }
 
