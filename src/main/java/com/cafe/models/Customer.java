@@ -38,6 +38,10 @@ public abstract class Customer { // this is the customer base class
         this.spritePath = spritePath;
     }
 
+    public void setPatience(int patience){
+        this.patience = patience;
+    }
+
     public void decreasePatience(){
         this.patience--;
     }
