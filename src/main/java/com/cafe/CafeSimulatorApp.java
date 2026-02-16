@@ -3,6 +3,7 @@ package com.cafe;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.cafe.managers.InventoryManager;
 import com.cafe.utils.ImageLoader;
 
 import javafx.animation.KeyFrame;
@@ -138,6 +139,34 @@ public class CafeSimulatorApp extends Application {
     }
 
     public static void main(String[] args) {
+        /*InventoryManager inventory = new InventoryManager(); // this initializes the ingredients for us: puts them in the hashmap and adds the maxAmount
+
+        // testing hasIngredient
+        System.out.println("Has milk: " + inventory.hasIngredient("milk")); // true
+        System.out.println("Has milk: " + inventory.hasIngredient("xyz")); // false
+
+        System.out.println("Starting amount of milk: " + inventory.getIngredient("milk").getCurrentAmount());
+        System.out.println("Starting amount of espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
+        System.out.println("Starting amount of cups: " + inventory.getIngredient("cups").getCurrentAmount());
+
+
+        // testing useIngredient works
+        inventory.useIngredient("milk");
+        System.out.println("Milk after use: " + inventory.getIngredient("milk").getCurrentAmount()); // decrementing it from 10 to 9
+
+        // Test canMakeRecipe
+        System.out.println("Can make latte: " + inventory.canMakeRecipe("milk,espresso,cups")); // should print true, all the ingredients were initialized when we called the InventoryManager
+
+        System.out.println("Making latte....!");
+        // Test useIngredients to make a recipe
+        inventory.useIngredients("milk,espresso,cups");
+        System.out.println("Milk after recipe: " + inventory.getIngredient("milk").getCurrentAmount());
+        System.out.println("Espresso after recipe: " + inventory.getIngredient("espresso").getCurrentAmount());
+        System.out.println("Cups after recipe: " + inventory.getIngredient("cups").getCurrentAmount());
+
+        // Test refill
+        inventory.refillIngredient("milk"); // this will refill the ingredient passed in to the max amount (10 milk)
+        System.out.println("Milk after refill: " + inventory.getIngredient("milk").getCurrentAmount()); */
         launch();
     }
 }
