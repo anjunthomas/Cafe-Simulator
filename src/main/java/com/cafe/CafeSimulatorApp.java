@@ -20,11 +20,24 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 
 public class CafeSimulatorApp extends Application {
+
+    private MediaPlayer backgroundMusic;
+
     @Override
     public void start(Stage stage) throws IOException {
+
+        String backgroundSong = getClass().getResource("/audio/cafebackgroundsong.mp3").toString();
+        Media song = new Media(backgroundSong);
+        backgroundMusic = new MediaPlayer(song);
+        backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE);
+        backgroundMusic.setVolume(0.15);
+        backgroundMusic.play();
+
 
         boolean[] coffeeBusy = { false };
         Image background = ImageLoader.load("backgroundReference.png", 800, 800);
