@@ -90,7 +90,7 @@ public class CafeSimulatorApp extends Application {
         StackPane cup_stack = new StackPane(pinkcup, redcup, bluecup);
 
         /* COFFEE */
-        IngredientView coffeeView = new IngredientView("espresso", "coffeebeans.png", 300, 340, inventory, glow, null);
+        IngredientView coffeeView = new IngredientView("espresso", "coffeebeans.png", 300, 340, inventory, glow, () -> audio.playCoffeeCrunch());
         coffeeView.getImageView().setTranslateX(110);
         coffeeView.getImageView().setTranslateY(60);
         coffeeView.getProgressBar().setTranslateX(110);
@@ -103,7 +103,7 @@ public class CafeSimulatorApp extends Application {
 
 
         /* SUGAR */
-        IngredientView sugarView = new IngredientView("sugar", "SugarBowl.png", 200, 200, inventory, glow, null);
+        IngredientView sugarView = new IngredientView("sugar", "SugarBowl.png", 200, 200, inventory, glow, () -> audio.playSugarBagSound());
         sugarView.getImageView().setTranslateX(-280);
         sugarView.getImageView().setTranslateY(80);
 

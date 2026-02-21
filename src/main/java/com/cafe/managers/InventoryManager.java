@@ -15,7 +15,7 @@ public class InventoryManager {
     }
 
     public void initialize(){
-        ingredients.put("milk", new Ingredient("milk", 10, "milk.png", "milk2.png"));
+        ingredients.put("milk", new Ingredient("milk", 10, "milk.png", "milk.png"));
         ingredients.put("espresso", new Ingredient("espresso", 10, "coffeebeans.png", "coffeebeans.png"));
         ingredients.put("cups", new Ingredient("cups", 10, "Cups_rack.png", "Cups_rack.png"));
         ingredients.put("sugar", new Ingredient("sugar", 10, "SugarBowl.png", "SugarBowl.png"));

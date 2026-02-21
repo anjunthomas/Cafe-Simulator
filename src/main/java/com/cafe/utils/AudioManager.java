@@ -12,6 +12,12 @@ public class AudioManager {
 
     private MediaPlayer milkPourSound;
 
+    private MediaPlayer coffeeGrindingSound;
+
+    private MediaPlayer coffeeCrunchSound;
+
+    private MediaPlayer sugarBagSound;
+
     public AudioManager(Class<?> resourceClass) {
         backgroundMusic = new MediaPlayer(new Media(resourceClass.getResource("/audio/cafebackgroundsong.mp3").toString()));
         backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE);
@@ -21,6 +27,11 @@ public class AudioManager {
         matchaBagCrunchSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/matchaBag.mp3").toString()));
         waterPourSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/waterSound.mp3").toString()));
         milkPourSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/MilkSound.mp3").toString()));
+        coffeeGrindingSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/CoffeeGrinder1.mp3").toString()));
+        coffeeCrunchSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/CoffeeCrunch.mp3").toString()));
+        sugarBagSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/Sugar.mp3").toString()));
+
+        sugarBagSound.setVolume(0.3);
     }
 
     public void playBackground() { backgroundMusic.play(); }
@@ -43,5 +54,20 @@ public class AudioManager {
     public void playMilk() {
         milkPourSound.seek(milkPourSound.getStartTime());
         milkPourSound.play();
+    }
+
+    public void playCoffeeGrinder() {
+        coffeeGrindingSound.seek(coffeeGrindingSound.getStartTime());
+        coffeeGrindingSound.play();
+    }
+
+    public void playCoffeeCrunch() {
+        coffeeCrunchSound.seek(coffeeCrunchSound.getStartTime());
+        coffeeCrunchSound.play();
+    }
+
+    public void playSugarBagSound() {
+        sugarBagSound.seek(sugarBagSound.getStartTime());
+        sugarBagSound.play();
     }
 }
