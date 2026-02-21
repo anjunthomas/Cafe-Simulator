@@ -18,7 +18,9 @@ public class InventoryManager {
         ingredients.put("milk", new Ingredient("milk", 10, "milk.png", "milk2.png"));
         ingredients.put("espresso", new Ingredient("espresso", 10, "coffeebeans.png", "coffeebeans2.png"));
         ingredients.put("cups", new Ingredient("cups", 10, "Cups_rack.png", "Cups_rack2.png"));
-        ingredients.put("sugar", new Ingredient("sugar", 10, "SugarBowl.png", "SugarBowl2.png"));
+        ingredients.put("sugar", new Ingredient("sugar", 10, "SugarBowl.png", "EmptySugarBowl.png"));
+        ingredients.put("water", new Ingredient("water", 10, "waterfull.png", "water_empty.png"));
+        ingredients.put("matcha", new Ingredient("matcha", 10, "matchafull.png", "matcha_empty.png"));
     }
 
     public boolean useIngredient(String name){

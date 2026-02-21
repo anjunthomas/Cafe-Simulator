@@ -2,6 +2,7 @@ package com.cafe;
 
 import java.io.IOException;
 
+import com.cafe.managers.GameManager;
 import com.cafe.managers.InventoryManager;
 import com.cafe.utils.ImageLoader;
 
@@ -13,11 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class CafeSimulatorApp extends Application {
+
+    GameManager gameManager = new GameManager();
+    InventoryManager inventory = gameManager.getInventoryManager();
 
     private MediaPlayer backgroundMusic;
 
@@ -25,11 +28,24 @@ public class CafeSimulatorApp extends Application {
     public void start(Stage stage) throws IOException {
 
         String backgroundSong = getClass().getResource("/audio/cafebackgroundsong.mp3").toString();
+        String clink = getClass().getResource("/audio/CupclinkSound.mp3").toString();
+        String matchaBagCrunch = getClass().getResource("/audio/matchaBag.mp3").toString();
+        String waterSound = getClass().getResource("/audio/waterSound.mp3").toString();
+
         Media song = new Media(backgroundSong);
         backgroundMusic = new MediaPlayer(song);
         backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE);
         backgroundMusic.setVolume(0.15);
         backgroundMusic.play();
+
+        // for cup clink sound
+        MediaPlayer clinkSound = new MediaPlayer(new Media(clink));
+
+        // for matchaBagCrunch
+        MediaPlayer matchaBagCrunchSound = new MediaPlayer(new Media(matchaBagCrunch));
+
+        // for milkSound
+        MediaPlayer waterPourSound = new MediaPlayer(new Media(waterSound));
 
 
         boolean[] coffeeBusy = { false };
@@ -121,8 +137,14 @@ public class CafeSimulatorApp extends Application {
         coffeeStack.setTranslateY(60);
 
         coffee.setOnMouseClicked(e -> {
+            System.out.println("Clicked coffee");
             coffeeBusy[0] = true;
-            coffee.setEffect(null); 
+            coffee.setEffect(null);
+            inventory.useIngredient("espresso");
+            if(!inventory.hasIngredient("espresso")){
+                System.out.println("coffee beans are empty!");
+                //   coffee.setImage(ImageLoader.load("coffeebeans2.png"))
+            }
         });
 
         /* MILK */
@@ -152,15 +174,21 @@ public class CafeSimulatorApp extends Application {
         });
 
         milk.setOnMouseClicked(e -> {
+            System.out.println("clicked on milk!");
             milkBusy[0] = true;
-            milk.setEffect(null); 
+            milk.setEffect(null);
+            inventory.useIngredient("milk");
+            if(!inventory.hasIngredient("milk")){
+                System.out.println("milk is empty!");
+                //   coffee.setImage(ImageLoader.load("coffeebeans2.png"))
+            }
         });
 
         /* SUGAR */
 
         boolean[] sugarBusy = { false };
 
-        Image sugar_full = ImageLoader.load("SugarBowl.png");
+        Image sugar_full = ImageLoader.load("SugarBowl.png", 200, 200);
         ImageView sugar = new ImageView(sugar_full);
 
         sugar.setPickOnBounds(false); 
@@ -184,8 +212,15 @@ public class CafeSimulatorApp extends Application {
         });
 
         sugar.setOnMouseClicked(e -> {
+            System.out.println("Clicked on sugar");
             sugarBusy[0] = true;
-            sugar.setEffect(null); 
+            sugar.setEffect(null);
+            inventory.useIngredient("sugar");
+            if(!inventory.hasIngredient("sugar")){
+                System.out.println("sugar is empty!");
+                sugar.setImage(ImageLoader.load(inventory.getIngredient("sugar").getImagePath(), 200, 200));
+            }
+
         });
 
         /* MATCHA */
@@ -215,8 +250,16 @@ public class CafeSimulatorApp extends Application {
         });
 
         matcha.setOnMouseClicked(e -> {
+            System.out.println("clicked on matcha!");
             matchaBusy[0] = true;
-            matcha.setEffect(null); 
+            matcha.setEffect(null);
+            matchaBagCrunchSound.seek(matchaBagCrunchSound.getStartTime());
+            matchaBagCrunchSound.play();
+            inventory.useIngredient("matcha");
+            if(!inventory.hasIngredient("matcha")){
+                System.out.println("matcha is empty!");
+                matcha.setImage(ImageLoader.load(inventory.getIngredient("matcha").getImagePath(), 280, 340));
+            }
         });
 
         /* WATER */
@@ -247,8 +290,16 @@ public class CafeSimulatorApp extends Application {
         });
 
         water.setOnMouseClicked(e -> {
+            System.out.println("Clicked on water");
             waterBusy[0] = true;
-            water.setEffect(null); 
+            water.setEffect(null);
+            waterPourSound.seek(waterPourSound.getStartTime());
+            waterPourSound.play();
+            inventory.useIngredient("water");
+            if(!inventory.hasIngredient("water")){
+                System.out.println("water is empty!");
+                water.setImage(ImageLoader.load(inventory.getIngredient("water").getImagePath(), 150, 180));
+            }
         });
 
         /* CUPS RACK */
@@ -261,6 +312,11 @@ public class CafeSimulatorApp extends Application {
         cups.setTranslateX(-140);
         cups.setTranslateY(-250);
         cups.setRotate(0);
+
+        cups.setOnMouseClicked(e -> {
+            clinkSound.seek(clinkSound.getStartTime());
+            clinkSound.play();
+        });
 
         // the StackPane lets us layer images on top of each other
         StackPane root = new StackPane();
