@@ -2,6 +2,7 @@ package com.cafe;
 
 import java.io.IOException;
 
+import com.cafe.managers.InventoryManager;
 import com.cafe.utils.ImageLoader;
 
 import javafx.application.Application;
@@ -12,15 +13,28 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class CafeSimulatorApp extends Application {
+
+    private MediaPlayer backgroundMusic;
+
     @Override
     public void start(Stage stage) throws IOException {
+
+        String backgroundSong = getClass().getResource("/audio/cafebackgroundsong.mp3").toString();
+        Media song = new Media(backgroundSong);
+        backgroundMusic = new MediaPlayer(song);
+        backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE);
+        backgroundMusic.setVolume(0.15);
+        backgroundMusic.play();
+
 
         boolean[] coffeeBusy = { false };
         Image background = ImageLoader.load("newbackground.png", 800, 780);
         ImageView backgroundView = new ImageView(background);
-
 
         /* PLANT */
 
@@ -101,41 +115,14 @@ public class CafeSimulatorApp extends Application {
             }
         });
 
-        // ProgressBar coffeeProgress = new ProgressBar(0);
-        // coffeeProgress.setPrefWidth(120); // bigger
-        // coffeeProgress.setPrefHeight(20); // thicker
-        // coffeeProgress.setVisible(false);
-        // coffeeProgress.setStyle("-fx-accent: red;"); // bright color
-
         StackPane coffeeStack = new StackPane(coffee);
-        // StackPane coffeeStack = new StackPane(coffee, coffeeProgress);
-        // StackPane.setAlignment(coffeeProgress, Pos.CENTER);
 
         coffeeStack.setTranslateX(110);
         coffeeStack.setTranslateY(60);
 
-        // Button coffeeButton = new Button();
-
         coffee.setOnMouseClicked(e -> {
-
-            coffeeBusy[0] = true; // mark busy
+            coffeeBusy[0] = true;
             coffee.setEffect(null); 
-
-            // coffeeProgress.setProgress(0);
-            // coffeeProgress.setVisible(true);
-
-            // Timeline timeline = new Timeline(
-            // new KeyFrame(Duration.seconds(2),
-            // new KeyValue(coffeeProgress.progressProperty(), 1)
-            // )
-            // );
-
-            // timeline.setOnFinished(event -> {
-            // coffeeProgress.setVisible(false);
-            // coffeeBusy[0] = false; // allow hover again
-            // coffee.setDisable(false);
-            // });
-            // timeline.play();
         });
 
         /* MILK */
@@ -167,11 +154,10 @@ public class CafeSimulatorApp extends Application {
         milk.setOnMouseClicked(e -> {
             milkBusy[0] = true;
             milk.setEffect(null); 
-
         });
-        
+
         /* SUGAR */
-        
+
         boolean[] sugarBusy = { false };
 
         Image sugar_full = ImageLoader.load("SugarBowl.png");
@@ -200,7 +186,6 @@ public class CafeSimulatorApp extends Application {
         sugar.setOnMouseClicked(e -> {
             sugarBusy[0] = true;
             sugar.setEffect(null); 
-
         });
 
         /* MATCHA */
@@ -209,7 +194,7 @@ public class CafeSimulatorApp extends Application {
         Image matcha_full = ImageLoader.load("matchafull.png");
         ImageView matcha = new ImageView(matcha_full);
 
-        matcha.setPickOnBounds(false); // IMPORTANT
+        matcha.setPickOnBounds(false);
         matcha.setTranslateX(260);
         matcha.setTranslateY(70);
 
@@ -232,7 +217,6 @@ public class CafeSimulatorApp extends Application {
         matcha.setOnMouseClicked(e -> {
             matchaBusy[0] = true;
             matcha.setEffect(null); 
-
         });
 
         /* WATER */
@@ -242,7 +226,7 @@ public class CafeSimulatorApp extends Application {
         Image water_full = ImageLoader.load("waterfull.png");
         ImageView water = new ImageView(water_full);
 
-        water.setPickOnBounds(false); // IMPORTANT
+        water.setPickOnBounds(false);
         water.setTranslateX(-150);
         water.setTranslateY(-60);
 
@@ -265,15 +249,14 @@ public class CafeSimulatorApp extends Application {
         water.setOnMouseClicked(e -> {
             waterBusy[0] = true;
             water.setEffect(null); 
-
         });
 
-        /* CUPS */
+        /* CUPS RACK */
 
         Image cups_stack = ImageLoader.load("Cups_rack.png");
         ImageView cups = new ImageView(cups_stack);
 
-        cups.setPickOnBounds(false); // IMPORTANT
+        cups.setPickOnBounds(false);
         cups.setOnMouseExited(e -> cups.setImage(cups_stack));
         cups.setTranslateX(-140);
         cups.setTranslateY(-180);
@@ -290,8 +273,6 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(cups);
         root.getChildren().add(plant);
         root.getChildren().add(matcha);
-        
-        
 
         Scene scene = new Scene(root, 900, 900);
         stage.setTitle("Cafe Simulator!");
@@ -300,49 +281,33 @@ public class CafeSimulatorApp extends Application {
     }
 
     public static void main(String[] args) {
-        /*
-         * InventoryManager inventory = new InventoryManager(); // this initializes the
-         * ingredients for us: puts them in the hashmap and adds the maxAmount
-         * 
-         * // testing hasIngredient
-         * System.out.println("Has milk: " + inventory.hasIngredient("milk")); // true
-         * System.out.println("Has milk: " + inventory.hasIngredient("xyz")); // false
-         * 
-         * System.out.println("Starting amount of milk: " +
-         * inventory.getIngredient("milk").getCurrentAmount());
-         * System.out.println("Starting amount of espresso: " +
-         * inventory.getIngredient("espresso").getCurrentAmount());
-         * System.out.println("Starting amount of cups: " +
-         * inventory.getIngredient("cups").getCurrentAmount());
-         * 
-         * 
-         * // testing useIngredient works
-         * inventory.useIngredient("milk");
-         * System.out.println("Milk after use: " +
-         * inventory.getIngredient("milk").getCurrentAmount()); // decrementing it from
-         * 10 to 9
-         * 
-         * // Test canMakeRecipe
-         * System.out.println("Can make latte: " +
-         * inventory.canMakeRecipe("milk,espresso,cups")); // should print true, all the
-         * ingredients were initialized when we called the InventoryManager
-         * 
-         * System.out.println("Making latte....!");
-         * // Test useIngredients to make a recipe
-         * inventory.useIngredients("milk,espresso,cups");
-         * System.out.println("Milk after recipe: " +
-         * inventory.getIngredient("milk").getCurrentAmount());
-         * System.out.println("Espresso after recipe: " +
-         * inventory.getIngredient("espresso").getCurrentAmount());
-         * System.out.println("Cups after recipe: " +
-         * inventory.getIngredient("cups").getCurrentAmount());
-         * 
-         * // Test refill
-         * inventory.refillIngredient("milk"); // this will refill the ingredient passed
-         * in to the max amount (10 milk)
-         * System.out.println("Milk after refill: " +
-         * inventory.getIngredient("milk").getCurrentAmount());
-         */
+        /*InventoryManager inventory = new InventoryManager(); // this initializes the ingredients for us: puts them in the hashmap and adds the maxAmount
+
+        // testing hasIngredient
+        System.out.println("Has milk: " + inventory.hasIngredient("milk")); // true
+        System.out.println("Has milk: " + inventory.hasIngredient("xyz")); // false
+
+        System.out.println("Starting amount of milk: " + inventory.getIngredient("milk").getCurrentAmount());
+        System.out.println("Starting amount of espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
+        System.out.println("Starting amount of cups: " + inventory.getIngredient("cups").getCurrentAmount());
+
+        // testing useIngredient works
+        inventory.useIngredient("milk");
+        System.out.println("Milk after use: " + inventory.getIngredient("milk").getCurrentAmount()); // decrementing it from 10 to 9
+
+        // Test canMakeRecipe
+        System.out.println("Can make latte: " + inventory.canMakeRecipe("milk,espresso,cups")); // should print true, all the ingredients were initialized when we called the InventoryManager
+
+        System.out.println("Making latte....!");
+        // Test useIngredients to make a recipe
+        inventory.useIngredients("milk,espresso,cups");
+        System.out.println("Milk after recipe: " + inventory.getIngredient("milk").getCurrentAmount());
+        System.out.println("Espresso after recipe: " + inventory.getIngredient("espresso").getCurrentAmount());
+        System.out.println("Cups after recipe: " + inventory.getIngredient("cups").getCurrentAmount());
+
+        // Test refill
+        inventory.refillIngredient("milk"); // this will refill the ingredient passed in to the max amount (10 milk)
+        System.out.println("Milk after refill: " + inventory.getIngredient("milk").getCurrentAmount()); */
         launch();
     }
 }
