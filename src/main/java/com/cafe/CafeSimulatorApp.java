@@ -16,6 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.scene.control.ProgressBar;
 
 public class CafeSimulatorApp extends Application {
 
@@ -131,7 +135,17 @@ public class CafeSimulatorApp extends Application {
             }
         });
 
+        javafx.scene.control.ProgressBar coffeeProgress = new javafx.scene.control.ProgressBar(0);
+        coffeeProgress.setPrefWidth(120);
+        coffeeProgress.setPrefHeight(20);
+        coffeeProgress.setVisible(false);
+        coffeeProgress.setStyle("-fx-accent: #8b6f5e;");
+
+        // StackPane coffeeStack = new StackPane(coffee, coffeeProgress);
+        // StackPane.setAlignment(coffeeProgress, Pos.CENTER);
         StackPane coffeeStack = new StackPane(coffee);
+
+
 
         coffeeStack.setTranslateX(110);
         coffeeStack.setTranslateY(60);
@@ -145,6 +159,22 @@ public class CafeSimulatorApp extends Application {
                 System.out.println("coffee beans are empty!");
                 //   coffee.setImage(ImageLoader.load("coffeebeans2.png"))
             }
+            // coffeeProgress.setProgress(0);
+            // coffeeProgress.setVisible(true);
+
+            // Timeline timeline = new Timeline(
+            // new KeyFrame(Duration.seconds(2),
+            // new KeyValue(coffeeProgress.progressProperty(), 1)
+            // )
+            // );
+
+            // timeline.setOnFinished(event -> {
+            // coffeeProgress.setVisible(false);
+            // coffeeBusy[0] = false;
+            // coffee.setDisable(false);
+            // });
+            // timeline.play();
+
         });
 
         /* MILK */
