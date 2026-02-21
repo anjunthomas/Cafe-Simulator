@@ -318,6 +318,55 @@ public class CafeSimulatorApp extends Application {
             clinkSound.play();
         });
 
+        /* setting up refill functionality with a popup  */
+        javafx.stage.Popup refillPopup = new javafx.stage.Popup();
+
+        javafx.scene.layout.VBox popupContent = new javafx.scene.layout.VBox(10);
+        popupContent.setStyle("-fx-background-color: #f5e6d3; -fx-padding: 15; -fx-border-color: #8b6f5e; -fx-border-width: 2;");
+
+        javafx.scene.control.Label title = new javafx.scene.control.Label("Refill Ingredients");
+
+        javafx.scene.control.Button refillMilk = new javafx.scene.control.Button("Refill Milk");
+        javafx.scene.control.Button refillCoffee = new javafx.scene.control.Button("Refill Coffee");
+        javafx.scene.control.Button refillSugar = new javafx.scene.control.Button("Refill Sugar");
+        javafx.scene.control.Button refillMatcha = new javafx.scene.control.Button("Refill Matcha");
+        javafx.scene.control.Button refillWater = new javafx.scene.control.Button("Refill Water");
+        javafx.scene.control.Button closePopup = new javafx.scene.control.Button("Close");
+
+        refillMilk.setOnMouseClicked(e -> {
+            inventory.refillIngredient("milk");
+            milk.setImage(ImageLoader.load("milk.png"));
+        });
+        refillCoffee.setOnMouseClicked(e -> {
+            inventory.refillIngredient("espresso");
+            coffee.setImage(ImageLoader.load("coffeebeans.png"));
+        });
+        refillSugar.setOnMouseClicked(e -> {
+            inventory.refillIngredient("sugar");
+            sugar.setImage(ImageLoader.load("SugarBowl.png", 200, 200));
+        });
+        refillMatcha.setOnMouseClicked(e -> {
+            inventory.refillIngredient("matcha");
+            matcha.setImage(ImageLoader.load("matchafull.png", 280, 340));
+        });
+        refillWater.setOnMouseClicked(e -> {
+            inventory.refillIngredient("water");
+            water.setImage(ImageLoader.load("waterfull.png", 150, 180));
+        });
+        closePopup.setOnMouseClicked(e -> refillPopup.hide());
+
+        popupContent.getChildren().addAll(title, refillMilk, refillCoffee, refillSugar, refillMatcha, refillWater, closePopup);
+        refillPopup.getContent().add(popupContent);
+
+        // the actual refill button
+        javafx.scene.control.Button refillBtn = new javafx.scene.control.Button("Refill");
+        refillBtn.setTranslateX(370);
+        refillBtn.setTranslateY(-420);
+        refillBtn.setOnMouseClicked(e -> {
+            refillPopup.show(stage);
+        });
+
+
         // the StackPane lets us layer images on top of each other
         StackPane root = new StackPane();
         root.getChildren().add(backgroundView);
@@ -329,6 +378,7 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(cups);
         root.getChildren().add(plant);
         root.getChildren().add(matcha);
+        root.getChildren().add(refillBtn);
 
         Scene scene = new Scene(root, 900, 900);
         stage.setTitle("Cafe Simulator!");
