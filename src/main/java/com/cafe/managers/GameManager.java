@@ -20,6 +20,10 @@ public class GameManager {
         this.inventoryManager = new InventoryManager();
     }
 
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
+    }
+
     public int getSatisfiedCount() {
         return satisfiedCount;
     }
