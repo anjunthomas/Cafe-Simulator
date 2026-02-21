@@ -33,16 +33,16 @@ public class CafeSimulatorApp extends Application {
 
 
         boolean[] coffeeBusy = { false };
-        Image background = ImageLoader.load("newbackground.png", 800, 780);
+        Image background = ImageLoader.load("newbackground.png", 1000, 1000);
         ImageView backgroundView = new ImageView(background);
 
         /* PLANT */
 
-        Image plant_decor = ImageLoader.load("Plant.png");
+        Image plant_decor = ImageLoader.load("Plant.png", 80, 80);
         ImageView plant = new ImageView(plant_decor);
 
         plant.setTranslateX(280);
-        plant.setTranslateY(-50);
+        plant.setTranslateY(-30);
 
         /* CUPS */
 
@@ -63,12 +63,12 @@ public class CafeSimulatorApp extends Application {
         ImageView redcup = new ImageView(red_cup);
         ImageView bluecup = new ImageView(blue_cup);
 
-        pinkcup.setTranslateX(-150);
-        pinkcup.setTranslateY(20);
-        redcup.setTranslateX(20);
-        redcup.setTranslateY(20);
-        bluecup.setTranslateX(20);
-        bluecup.setTranslateY(20);
+        //pinkcup.setTranslateX(-150);
+        //pinkcup.setTranslateY(20);
+        //redcup.setTranslateX(20);
+       // redcup.setTranslateY(20);
+        //bluecup.setTranslateX(20);
+        //bluecup.setTranslateY(20);
 
         pinkcup.setOnMouseEntered(e -> {
             if (!pinkBusy[0]) {
@@ -164,7 +164,7 @@ public class CafeSimulatorApp extends Application {
         ImageView sugar = new ImageView(sugar_full);
 
         sugar.setPickOnBounds(false); 
-        sugar.setTranslateX(-300);
+        sugar.setTranslateX(-280);
         sugar.setTranslateY(80);
 
         sugar.setOnMouseEntered(e -> {
@@ -191,7 +191,7 @@ public class CafeSimulatorApp extends Application {
         /* MATCHA */
         boolean[] matchaBusy = { false };
 
-        Image matcha_full = ImageLoader.load("matchafull.png");
+        Image matcha_full = ImageLoader.load("matchafull.png", 280, 340);
         ImageView matcha = new ImageView(matcha_full);
 
         matcha.setPickOnBounds(false);
@@ -223,12 +223,12 @@ public class CafeSimulatorApp extends Application {
 
         boolean[] waterBusy = { false };
 
-        Image water_full = ImageLoader.load("waterfull.png");
+        Image water_full = ImageLoader.load("waterfull.png", 150, 180);
         ImageView water = new ImageView(water_full);
 
         water.setPickOnBounds(false);
-        water.setTranslateX(-150);
-        water.setTranslateY(-60);
+        water.setTranslateX(-130);
+        water.setTranslateY(-40);
 
         water.setOnMouseEntered(e -> {
             if (!waterBusy[0]) {
@@ -253,19 +253,19 @@ public class CafeSimulatorApp extends Application {
 
         /* CUPS RACK */
 
-        Image cups_stack = ImageLoader.load("Cups_rack.png");
+        Image cups_stack = ImageLoader.load("Cups_rack.png", 300, 300);
         ImageView cups = new ImageView(cups_stack);
 
         cups.setPickOnBounds(false);
         cups.setOnMouseExited(e -> cups.setImage(cups_stack));
         cups.setTranslateX(-140);
-        cups.setTranslateY(-180);
-        cups.setRotate(5);
+        cups.setTranslateY(-250);
+        cups.setRotate(0);
 
         // the StackPane lets us layer images on top of each other
         StackPane root = new StackPane();
         root.getChildren().add(backgroundView);
-        root.getChildren().add(cup_stack);
+        //root.getChildren().add(cup_stack);
         root.getChildren().add(coffeeStack);
         root.getChildren().add(water);
         root.getChildren().add(milk);
