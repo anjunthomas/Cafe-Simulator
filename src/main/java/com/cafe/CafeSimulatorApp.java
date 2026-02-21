@@ -111,20 +111,12 @@ public class CafeSimulatorApp extends Application {
         IngredientView matchaView = new IngredientView("matcha", "matchafull.png", 280, 340, inventory, glow, () -> audio.playMatchaCrunch());
         matchaView.getImageView().setTranslateX(260);
         matchaView.getImageView().setTranslateY(70);
-        matchaView.getImageView().setOnMouseClicked(e -> {
-            audio.playMatchaCrunch();
-            matchaView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("matcha").getImagePath(), 280, 340));
-        });
 
         /* WATER */
 
         IngredientView waterView = new IngredientView("water", "waterfull.png", 150, 180, inventory, glow, () -> audio.playWater());
         waterView.getImageView().setTranslateX(-130);
         waterView.getImageView().setTranslateY(-40);
-        waterView.getImageView().setOnMouseClicked(e -> {
-            audio.playWater();
-            waterView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("water").getImagePath(), 150, 180));
-        });
         waterView.getProgressBar().setTranslateX(-130);
         waterView.getProgressBar().setTranslateY(-10);
 
