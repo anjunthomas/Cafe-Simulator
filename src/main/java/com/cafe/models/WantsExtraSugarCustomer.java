@@ -6,4 +6,12 @@ public class WantsExtraSugarCustomer extends Customer{
     public WantsExtraSugarCustomer(String name, int maxPatience, String spritePath) {
         super(name, maxPatience, spritePath);
     }
+
+    @Override
+    public void setOrder(Drink drink){
+        // to add 2 extra sugar to their drink, this will be randomized later between 1 and 2
+        String modifiedRecipe = drink.getRecipe() + ",sugar,sugar";
+        Drink customDrink = new  Drink(drink.getName() + " (Extra Sugar)", modifiedRecipe);
+        super.setOrder(customDrink);
+    }
 }
