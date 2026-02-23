@@ -10,14 +10,28 @@ public class GameManager {
     private int satisfiedCount = 0;
     private Drink latte;
     private Drink coffee;
+
+    private Drink matchaLatte;
+
+    private Drink americano;
     private InventoryManager inventoryManager;
+
+    private CustomerManager customerManager;
+    private long lastCustomerLeftTime = 0;
+    private final long SPAWN_DELAY = 3000;
 
     private List<Drink> availableDrinks;
 
     public GameManager() {
         this.latte = new Drink("Latte", "milk,espresso,cups");
         this.coffee = new Drink("Coffee", "espresso,cups");
+        this.matchaLatte = new Drink("Matcha Latte", "matcha,milk,cups");
+        this.americano = new Drink("Americano", "water,espresso,cups");
         this.inventoryManager = new InventoryManager();
+
+        String[] sprites = {"fox.png", "deer.png", "penguin.png", "cat.png"};
+        Drink[] drinks = {matchaLatte, americano};
+        this.customerManager = new CustomerManager(sprites, drinks);
     }
 
     public InventoryManager getInventoryManager() {
@@ -28,6 +42,24 @@ public class GameManager {
         return satisfiedCount;
     }
 
+    public Customer getCurrentCustomer() {
+        return customerManager.getCurrentCustomer();
+    }
+
+    public void update() {
+        // Update current customer's patience
+        customerManager.updateCustomer();
+
+        // If no customer and 3 seconds have passed, spawn new one
+        if (!customerManager.hasCustomer() &&
+                System.currentTimeMillis() - lastCustomerLeftTime > SPAWN_DELAY) {
+            customerManager.spawnCustomer();
+            lastCustomerLeftTime = System.currentTimeMillis();
+        }
+    }
+
+
+
     public List<Drink> getAvailableDrinks() {
         return availableDrinks;
     }
@@ -37,12 +69,20 @@ public class GameManager {
 
         String customerOrder = customer.getOrder().getRecipe();
 
-        if (!customerOrder.equals(playerRecipe)) {
-            customer.setPatience(0); // setting the customer to be angry right away
+        String[] customerIngredients = customerOrder.split(",");
+        String[] playerIngredients = playerRecipe.split(",");
+
+        java.util.Arrays.sort(customerIngredients);
+        java.util.Arrays.sort(playerIngredients);
+
+        if (!java.util.Arrays.equals(customerIngredients, playerIngredients)) {
+            customer.setPatience(0);
             return false;
         }
 
         inventoryManager.useIngredients(playerRecipe);
+        customerManager.removeCurrentCustomer();
+        lastCustomerLeftTime = System.currentTimeMillis();
         satisfiedCount++;
         return true;
     }

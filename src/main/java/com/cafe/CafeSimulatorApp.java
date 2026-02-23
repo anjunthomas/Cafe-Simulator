@@ -8,25 +8,148 @@ import com.cafe.utils.AudioManager;
 import com.cafe.utils.ImageLoader;
 
 import com.cafe.utils.IngredientView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class CafeSimulatorApp extends Application {
 
     GameManager gameManager = new GameManager();
     InventoryManager inventory = gameManager.getInventoryManager();
 
+    private ImageView customerSprite;
+
+    private ImageView messageBubble;
+
+    private ImageView drinkIcon;
+
+    private javafx.scene.control.Label patienceLabel;
+    private javafx.scene.control.Label orderLabel;
+    private ProgressBar patienceBar;
+    private javafx.scene.control.Label satisfactionLabel;
+
+    private javafx.scene.control.Label errorLabel;
+
+    private void showError(String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+
+        Timeline hideError = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+            errorLabel.setVisible(false);
+        }));
+        hideError.play();
+    }
+
+    private void updateCustomerDisplay() {
+        com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+
+        if (current != null) {
+            customerSprite.setImage(ImageLoader.load(current.getSpritePath(), 450, 450));
+            customerSprite.setVisible(true);
+
+            orderLabel.setText("Wants: " + current.getOrder().getName());
+            orderLabel.setVisible(true);
+
+            messageBubble.setVisible(true);
+
+            String drinkName = current.getOrder().getName();
+            String drinkImagePath = "";
+
+            if (drinkName.contains("Coffee")) {
+                drinkImagePath = "coffee.png";
+            } else if (drinkName.contains("Latte") && !drinkName.contains("Matcha")) {
+                drinkImagePath = "latte.png";
+            } else if (drinkName.contains("Matcha")) {
+                drinkImagePath = "matcha.png";
+            }
+
+            if (!drinkImagePath.isEmpty()) {
+                drinkIcon.setImage(ImageLoader.load(drinkImagePath, 100, 100));
+                drinkIcon.setVisible(true);
+            }
+
+            // Show patience as text
+            patienceLabel.setText("Patience: " + current.getPatience());
+            patienceLabel.setVisible(true);
+
+            patienceBar.setProgress((double)current.getPatience() / current.getMaxPatience());
+            patienceBar.setVisible(true);
+
+
+        } else {
+            customerSprite.setVisible(false);
+            patienceLabel.setVisible(false);
+            patienceBar.setVisible(false);
+            messageBubble.setVisible(false);
+            drinkIcon.setVisible(false);
+        }
+
+        satisfactionLabel.setText("Satisfied: " + gameManager.getSatisfiedCount());
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
 
         AudioManager audio = new AudioManager(getClass());
         audio.playBackground();
+
+
+        Timeline gameLoop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            gameManager.update();
+            updateCustomerDisplay();
+        }));
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        gameLoop.play();
+
+        customerSprite = new ImageView();
+        customerSprite.setTranslateX(260);
+        customerSprite.setTranslateY(300);
+
+        orderLabel = new javafx.scene.control.Label();
+        orderLabel.setTranslateX(120);
+        orderLabel.setTranslateY(450);
+
+        patienceBar = new ProgressBar();
+        patienceBar.setTranslateX(120);
+        patienceBar.setTranslateY(470);
+
+        satisfactionLabel = new javafx.scene.control.Label("Satisfied: 0");
+        satisfactionLabel.setTranslateX(-370);
+        satisfactionLabel.setTranslateY(-400);
+
+        messageBubble = new ImageView(ImageLoader.load("thought.png", 320, 220));
+        messageBubble.setTranslateX(40);
+        messageBubble.setTranslateY(250);
+        messageBubble.setVisible(false);
+
+// Drink icon inside bubble
+        drinkIcon = new ImageView();
+        drinkIcon.setTranslateX(20);
+        drinkIcon.setTranslateY(200);
+        drinkIcon.setVisible(false);
+
+        errorLabel = new javafx.scene.control.Label();
+        errorLabel.setTranslateX(0);
+        errorLabel.setTranslateY(-350);
+        errorLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: red; -fx-font-weight: bold;");
+        errorLabel.setVisible(false);
+
+        patienceLabel = new javafx.scene.control.Label();
+        patienceLabel.setTranslateX(120);
+        patienceLabel.setTranslateY(420);
+
+        final String[] playerRecipe = {""};
+
+
 
         Image background = ImageLoader.load("newbackground.png", 1000, 1000);
         ImageView backgroundView = new ImageView(background);
@@ -61,7 +184,7 @@ public class CafeSimulatorApp extends Application {
         //pinkcup.setTranslateX(-150);
         //pinkcup.setTranslateY(20);
         //redcup.setTranslateX(20);
-       // redcup.setTranslateY(20);
+        // redcup.setTranslateY(20);
         //bluecup.setTranslateX(20);
         //bluecup.setTranslateY(20);
 
@@ -83,38 +206,53 @@ public class CafeSimulatorApp extends Application {
 
         pinkcup.setOnMouseClicked(e -> {
             pinkBusy[0] = true;
-            pinkcup.setEffect(null); 
+            pinkcup.setEffect(null);
 
         });
 
         StackPane cup_stack = new StackPane(pinkcup, redcup, bluecup);
 
         /* COFFEE */
-        IngredientView coffeeView = new IngredientView("espresso", "coffeebeans.png", 300, 340, inventory, glow, () -> audio.playCoffeeCrunch());
+        IngredientView coffeeView = new IngredientView("espresso", "coffeebeans.png", 300, 340, inventory, glow,
+                () -> audio.playCoffeeCrunch(),
+                () -> playerRecipe[0] += "espresso,",
+                () -> showError("Espresso is out! Please refill to use!"));
         coffeeView.getImageView().setTranslateX(110);
         coffeeView.getImageView().setTranslateY(60);
         coffeeView.getProgressBar().setTranslateX(110);
         coffeeView.getProgressBar().setTranslateY(90);
 
         /* MILK */
-        IngredientView milkView = new IngredientView("milk", "milk.png", 280, 320, inventory, glow, () -> audio.playMilk());
+        IngredientView milkView = new IngredientView("milk", "milk.png", 280, 320, inventory, glow,
+                () -> audio.playMilk(),
+                () -> playerRecipe[0] += "milk,",
+                () -> showError("Milk is out! Please refill to use!"));
         milkView.getImageView().setTranslateX(-215);
         milkView.getImageView().setTranslateY(20);
 
 
         /* SUGAR */
-        IngredientView sugarView = new IngredientView("sugar", "SugarBowl.png", 200, 200, inventory, glow, () -> audio.playSugarBagSound());
+        IngredientView sugarView = new IngredientView("sugar", "SugarBowl.png", 200, 200, inventory, glow,
+                () -> audio.playSugarBagSound(),
+                () -> playerRecipe[0] += "sugar,",
+                () -> showError("Sugar is out! Please refill to use!"));
         sugarView.getImageView().setTranslateX(-280);
         sugarView.getImageView().setTranslateY(80);
 
         /* MATCHA */
-        IngredientView matchaView = new IngredientView("matcha", "matchafull.png", 280, 340, inventory, glow, () -> audio.playMatchaCrunch());
+        IngredientView matchaView = new IngredientView("matcha", "matchafull.png", 280, 340, inventory, glow,
+                () -> audio.playMatchaCrunch(),
+                () -> playerRecipe[0] += "matcha,",
+                () -> showError("Matcha is out! Please refill to use!"));
         matchaView.getImageView().setTranslateX(260);
         matchaView.getImageView().setTranslateY(70);
 
         /* WATER */
 
-        IngredientView waterView = new IngredientView("water", "waterfull.png", 150, 180, inventory, glow, () -> audio.playWater());
+        IngredientView waterView = new IngredientView("water", "waterfull.png", 150, 180, inventory, glow,
+                () -> audio.playWater(),
+                () -> playerRecipe[0] += "water,",
+                () -> showError("Water is out! Please refill to use!"));
         waterView.getImageView().setTranslateX(-130);
         waterView.getImageView().setTranslateY(-40);
         waterView.getProgressBar().setTranslateX(-130);
@@ -133,6 +271,7 @@ public class CafeSimulatorApp extends Application {
 
         cups.setOnMouseClicked(e -> {
             audio.playClink();
+            playerRecipe[0] += "cups,";
         });
 
         /* setting up refill functionality with a popup  */
@@ -172,6 +311,35 @@ public class CafeSimulatorApp extends Application {
             refillPopup.show(stage);
         });
 
+        javafx.scene.control.Button serveBtn = new javafx.scene.control.Button("Serve");
+        serveBtn.setTranslateX(370);
+        serveBtn.setTranslateY(-390);
+        serveBtn.setOnMouseClicked(e -> {
+            com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+            if (current != null) {
+                String recipe = playerRecipe[0].replaceAll(",$", ""); // Remove trailing comma
+                boolean success = gameManager.serveCustomer(current, recipe);
+
+                if (success) {
+                    System.out.println("Success! Customer satisfied!");
+                    coffeeView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("espresso").getImagePath(), 300, 340));
+                    milkView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("milk").getImagePath(), 280, 320));
+                    sugarView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("sugar").getImagePath(), 200, 200));
+                    matchaView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("matcha").getImagePath(), 280, 340));
+                    waterView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("water").getImagePath(), 150, 180));
+                    System.out.println("Matcha amount: " + inventory.getIngredient("matcha").getCurrentAmount());
+                    System.out.println("Matcha image: " + inventory.getIngredient("matcha").getImagePath());
+                    System.out.println("Water amount: " + inventory.getIngredient("water").getCurrentAmount());
+                    System.out.println("Water image: " + inventory.getIngredient("water").getImagePath());
+                } else {
+                    System.out.println("Wrong drink!");
+                }
+
+                playerRecipe[0] = ""; // Reset
+                updateCustomerDisplay();
+            }
+        });
+
 
         // the StackPane lets us layer images on top of each other
         StackPane root = new StackPane();
@@ -190,8 +358,9 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
         root.getChildren().add(refillBtn);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, satisfactionLabel, serveBtn, messageBubble, drinkIcon, patienceLabel, errorLabel);
 
-        Scene scene = new Scene(root, 900, 900);
+        Scene scene = new Scene(root, 900, 1000);
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
         stage.show();
