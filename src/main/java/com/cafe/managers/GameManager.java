@@ -43,3 +43,22 @@ public class GameManager {
         return true;
     }
 }
+
+
+public void customerStatus(){
+    //Check if cutomer is available
+    if(hasCustomer()){
+        currentCustomer.decreasePatience();
+    }
+    if(currentCustomer.isAngry() || currentCustomer.getPatience() <=0){
+        currentCustomer = null;
+    }
+    if(currentCustomer.isServed()){
+        satisfactionCount++;
+        currentCustomer = null;
+
+    }
+        //After a 3 second delay spawn a new customer
+        spawnCustomer();
+
+}
