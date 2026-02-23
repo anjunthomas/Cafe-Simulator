@@ -1,71 +1,68 @@
 package com.cafe.managers;
 
-import com.cafe.managers.InventoryManager;
 import com.cafe.models.Drink;
 import com.cafe.models.Customer;
-import com.cafe.models.AngryCustomer;
 import com.cafe.models.RegularCustomer;
+import com.cafe.models.AngryCustomer;
 import com.cafe.models.WantsExtraSugarCustomer;
 
-import java.util.List;
 import java.util.Random;
 
-//Task 1
-public class CustomerManager{
-    //Create current Customer field
+public class CustomerManager {
     private Customer currentCustomer;
-
-    //Create Arrays for sprite paths and available drinks
     private String[] spritePaths;
     private Drink[] availableDrinks;
+    private Random random; // ← Add this field
 
-    //Task 2
-    public CustomerManager(String[] spritePaths, Drink[] availableDrinks){
+    public CustomerManager(String[] spritePaths, Drink[] availableDrinks) {
         this.spritePaths = spritePaths;
         this.availableDrinks = availableDrinks;
-
+        this.random = new Random(); // ← Initialize it
     }
 
-    //Task 3
-    public void spawnCustomer(){
+    public void spawnCustomer() {
+        // Random sprite (fox, deer, penguin, or cat image)
         String randomSprite = spritePaths[random.nextInt(spritePaths.length)];
-        Drink randomDrink = availableDrinks[random.nextInt(availableDrinks.length)];
 
-        int type = random.nextInt(2); //Randomly pick a new type of customer
-         if(type == 0){
-              new Customer = new RegularCustomer(name, 10, randomSprite);
-        } else if(type == 1){
-              new Customer = new AngryCustomer(name, 5, randomSprite);
-        } else(type == 2){
-              new Customer = new WantsExtraSugarCustomer(name, 10, randomSprite);
+        // Random customer BEHAVIOR type (0-2, not 0-3!)
+        int behaviorType = random.nextInt(3);
+
+        Customer newCustomer;
+        if (behaviorType == 0) {
+            newCustomer = new RegularCustomer("Customer", 25, randomSprite);
+        } else if (behaviorType == 1) {
+            newCustomer = new AngryCustomer("Customer", 25, randomSprite);
+        } else {
+            newCustomer = new WantsExtraSugarCustomer("Customer", 25, randomSprite);
         }
-        Customer.setOrder(randomDrink); //Generate a random drink for each new customer
-        currentCustomer = Customer; 
+
+        // Random drink order
+        Drink randomDrink = availableDrinks[random.nextInt(availableDrinks.length)];
+        newCustomer.setOrder(randomDrink);
+
+        currentCustomer = newCustomer;
     }
 
-    //Task 4
-    public void removeCustomer(){
+    public void removeCurrentCustomer() {
         currentCustomer = null;
     }
 
-    //Task 5
-    public Customer getCurrentCustomer(){
+    public Customer getCurrentCustomer() {
         return currentCustomer;
     }
 
-    //Task 6
-    public boolean hasCustomer(){
-        //Check is customer exists
-        if(currentCustomer != null){
-            return true;
-        } else{
-            return false;
-        }
+    public boolean hasCustomer() {
+        return currentCustomer != null;
     }
 
-    public void UpdateCustomer(){
-        if(currentCustomer != null){
+    public void updateCustomer() {
+        if (hasCustomer()) {
             currentCustomer.decreasePatience();
+
+            // Remove if angry
+            if (currentCustomer.isAngry()) {
+                currentCustomer = null;
+            }
         }
     }
 }
