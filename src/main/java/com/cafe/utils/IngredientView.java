@@ -19,7 +19,7 @@ public class IngredientView {
     private double width;
     private double height;
 
-    public IngredientView(String inventoryKey, String imageName, double width, double height, InventoryManager inventory, DropShadow glow, Runnable onClickSound) {
+    public IngredientView(String inventoryKey, String imageName, double width, double height, InventoryManager inventory, DropShadow glow, Runnable onClickSound, Runnable onIngredientUsed, Runnable onEmpty) {
         this.inventoryKey = inventoryKey;
         this.inventory = inventory;
         this.width = width;
@@ -39,11 +39,17 @@ public class IngredientView {
         });
 
         imageView.setOnMouseClicked(e -> {
+
+            if (inventory.getIngredient(inventoryKey).isEmpty()) {
+                if (onEmpty != null) onEmpty.run();
+                return;
+            }
+
             busy[0] = true;
             imageView.setEffect(null);
             if (onClickSound != null) onClickSound.run();
-            inventory.useIngredient(inventoryKey);
-            imageView.setImage(ImageLoader.load(inventory.getIngredient(inventoryKey).getImagePath(), width, height));
+
+            if (onIngredientUsed != null) onIngredientUsed.run();
         });
 
         progressBar = new ProgressBar(0);

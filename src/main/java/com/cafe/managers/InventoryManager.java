@@ -15,12 +15,12 @@ public class InventoryManager {
     }
 
     public void initialize(){
-        ingredients.put("milk", new Ingredient("milk", 10, "milk.png", "milk.png"));
-        ingredients.put("espresso", new Ingredient("espresso", 10, "coffeebeans.png", "coffeebeans.png"));
-        ingredients.put("cups", new Ingredient("cups", 10, "Cups_rack.png", "Cups_rack.png"));
-        ingredients.put("sugar", new Ingredient("sugar", 10, "SugarBowl.png", "SugarBowl.png"));
-        ingredients.put("water", new Ingredient("water", 10, "waterfull.png", "water_empty.png"));
-        ingredients.put("matcha", new Ingredient("matcha", 10, "matchafull.png", "matcha_empty.png"));
+        ingredients.put("milk", new Ingredient("milk", 3, "milk.png", "milk.png"));
+        ingredients.put("espresso", new Ingredient("espresso", 3, "coffeebeans.png", "coffeebeans.png"));
+        ingredients.put("cups", new Ingredient("cups", 3, "Cups_rack.png", "Cups_rack.png"));
+        ingredients.put("sugar", new Ingredient("sugar", 5, "SugarBowl.png", "SugarBowl.png"));
+        ingredients.put("water", new Ingredient("water", 3, "waterfull.png", "water_empty.png"));
+        ingredients.put("matcha", new Ingredient("matcha", 3, "matchafull.png", "matcha_empty.png"));
     }
 
     public boolean useIngredient(String name){
