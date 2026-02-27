@@ -13,7 +13,7 @@ public class GameManager {
 
     private Drink matchaLatte;
 
-    private Drink americano;
+    private Drink coldBrew;
     private InventoryManager inventoryManager;
 
     private CustomerManager customerManager;
@@ -26,11 +26,11 @@ public class GameManager {
         this.latte = new Drink("Latte", "milk,espresso,cups");
         this.coffee = new Drink("Coffee", "espresso,cups");
         this.matchaLatte = new Drink("Matcha Latte", "matcha,milk,cups");
-        this.americano = new Drink("Americano", "water,espresso,cups");
+        this.coldBrew = new Drink("Cold Brew", "waterF,espresso,cups");
         this.inventoryManager = new InventoryManager();
 
         String[] sprites = {"fox.png", "deer.png", "penguin.png", "cat.png"};
-        Drink[] drinks = {matchaLatte, americano};
+        Drink[] drinks = {matchaLatte, coldBrew, coffee, latte};
         this.customerManager = new CustomerManager(sprites, drinks);
     }
 
