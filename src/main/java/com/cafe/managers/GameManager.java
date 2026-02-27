@@ -26,7 +26,7 @@ public class GameManager {
         this.latte = new Drink("Latte", "milk,espresso,cups");
         this.coffee = new Drink("Coffee", "espresso,cups");
         this.matchaLatte = new Drink("Matcha Latte", "matcha,milk,cups");
-        this.coldBrew = new Drink("Cold Brew", "waterF,espresso,cups");
+        this.coldBrew = new Drink("Cold Brew", "water,espresso,cups");
         this.inventoryManager = new InventoryManager();
 
         String[] sprites = {"fox.png", "deer.png", "penguin.png", "cat.png"};
@@ -75,12 +75,14 @@ public class GameManager {
         java.util.Arrays.sort(customerIngredients);
         java.util.Arrays.sort(playerIngredients);
 
+        inventoryManager.useIngredients(playerRecipe);
+
         if (!java.util.Arrays.equals(customerIngredients, playerIngredients)) {
             customer.setPatience(0);
             return false;
         }
 
-        inventoryManager.useIngredients(playerRecipe);
+
         customerManager.removeCurrentCustomer();
         lastCustomerLeftTime = System.currentTimeMillis();
         satisfiedCount++;

@@ -100,16 +100,36 @@ public class CafeSimulatorApp extends Application {
         satisfactionLabel.setText("Satisfied: " + gameManager.getSatisfiedCount());
     }
 
+
     @Override
     public void start(Stage stage) throws IOException {
 
         AudioManager audio = new AudioManager(getClass());
         audio.playBackground();
 
+        javafx.scene.control.Label espressoCount = new javafx.scene.control.Label();
+        espressoCount.setTranslateX(110);
+        espressoCount.setTranslateY(120);
+
+        javafx.scene.control.Label milkCount = new javafx.scene.control.Label();
+        milkCount.setTranslateX(-215);
+        milkCount.setTranslateY(80);
+
+        javafx.scene.control.Label matchaCount = new javafx.scene.control.Label();
+        matchaCount.setTranslateX(260);
+        matchaCount.setTranslateY(130);
+
+        javafx.scene.control.Label waterCount = new javafx.scene.control.Label();
+        waterCount.setTranslateX(-130);
+        waterCount.setTranslateY(20);
 
         Timeline gameLoop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             gameManager.update();
             updateCustomerDisplay();
+            espressoCount.setText("espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
+            milkCount.setText("milk: " + inventory.getIngredient("milk").getCurrentAmount());
+            matchaCount.setText("matcha: " + inventory.getIngredient("matcha").getCurrentAmount());
+            waterCount.setText("water: " + inventory.getIngredient("water").getCurrentAmount());
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         gameLoop.play();
@@ -330,21 +350,6 @@ public class CafeSimulatorApp extends Application {
                 String recipe = playerRecipe[0].replaceAll(",$", ""); // Remove trailing comma
                 boolean success = gameManager.serveCustomer(current, recipe);
 
-                if (success) {
-                    System.out.println("Success! Customer satisfied!");
-                    coffeeView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("espresso").getImagePath(), 300, 340));
-                    milkView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("milk").getImagePath(), 280, 320));
-                    sugarView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("sugar").getImagePath(), 200, 200));
-                    matchaView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("matcha").getImagePath(), 280, 340));
-                    waterView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("water").getImagePath(), 150, 180));
-                    System.out.println("Matcha amount: " + inventory.getIngredient("matcha").getCurrentAmount());
-                    System.out.println("Matcha image: " + inventory.getIngredient("matcha").getImagePath());
-                    System.out.println("Water amount: " + inventory.getIngredient("water").getCurrentAmount());
-                    System.out.println("Water image: " + inventory.getIngredient("water").getImagePath());
-                } else {
-                    System.out.println("Wrong drink!");
-                }
-
                 playerRecipe[0] = ""; // Reset
                 updateCustomerDisplay();
             }
@@ -394,25 +399,26 @@ public class CafeSimulatorApp extends Application {
      		if (!refillPopup.isShowing()) refillPopup.show(stage);
      	});
 
-     	serveIcon.setOnMouseClicked(e -> {
-     		com.cafe.models.Customer current = gameManager.getCurrentCustomer();
-     		if (current != null) {
-     			audio.playClink();
-     			
-     			String recipe = playerRecipe[0].replaceAll(",$", "");
-     			boolean success = gameManager.serveCustomer(current, recipe);
-     			/* if (success) {
-     				// Show the smile on the bear
-     				satisfactionView.setVisible(true);
-     				new Timeline(new KeyFrame(Duration.seconds(2), ev -> satisfactionView.setVisible(false))).play();
-     			} */
-     			playerRecipe[0] = ""; 
-     			updateCustomerDisplay();
-     		}
-     	});
+        serveIcon.setOnMouseClicked(e -> {
+            com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+            if (current != null) {
+                audio.playClink();
+
+                String recipe = playerRecipe[0].replaceAll(",$", "");
+                boolean success = gameManager.serveCustomer(current, recipe);
+                coffeeView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("espresso").getImagePath(), 300, 340));
+                milkView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("milk").getImagePath(), 280, 320));
+                sugarView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("sugar").getImagePath(), 200, 200));
+                matchaView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("matcha").getImagePath(), 280, 340));
+                waterView.getImageView().setImage(ImageLoader.load(inventory.getIngredient("water").getImagePath(), 150, 180));
+                playerRecipe[0] = "";
+                updateCustomerDisplay();
+            }
+        });
 
      	// 3. Add them to the root - extra ones
      	root.getChildren().addAll(refillIcon, serveIcon, satisfactionView);
+        root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount);
      	
      	
         root.setStyle("-fx-background-color: #FFCC80;");
