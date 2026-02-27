@@ -50,6 +50,7 @@ public class IngredientView {
             if (onClickSound != null) onClickSound.run();
 
             if (onIngredientUsed != null) onIngredientUsed.run();
+            refreshImage();
         });
 
         progressBar = new ProgressBar(0);
@@ -80,4 +81,8 @@ public class IngredientView {
 
     public ImageView getImageView() { return imageView; }
     public ProgressBar getProgressBar() { return progressBar; }
+
+    public void refreshImage() {
+        imageView.setImage(ImageLoader.load(inventory.getIngredient(inventoryKey).getImagePath(), width, height));
+    }
 }

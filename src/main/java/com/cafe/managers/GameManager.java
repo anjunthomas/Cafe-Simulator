@@ -75,7 +75,7 @@ public class GameManager {
         java.util.Arrays.sort(customerIngredients);
         java.util.Arrays.sort(playerIngredients);
 
-        inventoryManager.useIngredients(playerRecipe);
+        //inventoryManager.useIngredients(playerRecipe);
 
         if (!java.util.Arrays.equals(customerIngredients, playerIngredients)) {
             customer.setPatience(0);
