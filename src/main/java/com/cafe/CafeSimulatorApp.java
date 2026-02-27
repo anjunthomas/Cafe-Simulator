@@ -31,6 +31,8 @@ public class CafeSimulatorApp extends Application {
     private ImageView messageBubble;
 
     private ImageView drinkIcon;
+    
+    private ImageView satisfactionView;
 
     private javafx.scene.control.Label patienceLabel;
     private javafx.scene.control.Label orderLabel;
@@ -124,7 +126,7 @@ public class CafeSimulatorApp extends Application {
 
         satisfactionLabel = new javafx.scene.control.Label("Satisfied: 0");
         satisfactionLabel.setTranslateX(-370);
-        satisfactionLabel.setTranslateY(-400);
+        satisfactionLabel.setTranslateY(-300);
 
         messageBubble = new ImageView(ImageLoader.load("thought.png", 320, 220));
         messageBubble.setTranslateX(40);
@@ -229,6 +231,8 @@ public class CafeSimulatorApp extends Application {
                 () -> showError("Milk is out! Please refill to use!"));
         milkView.getImageView().setTranslateX(-215);
         milkView.getImageView().setTranslateY(20);
+        milkView.getProgressBar().setTranslateX(-215);
+        milkView.getProgressBar().setTranslateY(50);
 
 
         /* SUGAR */
@@ -238,6 +242,8 @@ public class CafeSimulatorApp extends Application {
                 () -> showError("Sugar is out! Please refill to use!"));
         sugarView.getImageView().setTranslateX(-280);
         sugarView.getImageView().setTranslateY(80);
+        sugarView.getProgressBar().setTranslateX(-280);
+        sugarView.getProgressBar().setTranslateY(110);
 
         /* MATCHA */
         IngredientView matchaView = new IngredientView("matcha", "matchafull.png", 280, 340, inventory, glow,
@@ -246,6 +252,8 @@ public class CafeSimulatorApp extends Application {
                 () -> showError("Matcha is out! Please refill to use!"));
         matchaView.getImageView().setTranslateX(260);
         matchaView.getImageView().setTranslateY(70);
+        matchaView.getProgressBar().setTranslateX(260);
+        matchaView.getProgressBar().setTranslateY(100);
 
         /* WATER */
 
@@ -358,8 +366,54 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
         root.getChildren().add(refillBtn);
-        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, satisfactionLabel, serveBtn, messageBubble, drinkIcon, patienceLabel, errorLabel);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, satisfactionLabel, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel);
+        serveBtn.setVisible(false);
+        refillBtn.setVisible(false);
+        
+     // 1. Create Image Buttons with matching sizes
+        ImageView refillIcon = new ImageView(ImageLoader.load("refill.png", 195, 195));
+        refillIcon.setTranslateX(380); 
+        refillIcon.setTranslateY(-400);
+        refillIcon.setPickOnBounds(true); 
 
+        ImageView serveIcon = new ImageView(ImageLoader.load("serve.png", 220, 220));
+        serveIcon.setTranslateX(390);
+        serveIcon.setTranslateY(-330); 
+        serveIcon.setPickOnBounds(true);
+
+        // 2. Setup the Smile Icon
+        satisfactionView = new ImageView(ImageLoader.load("smile.png", 150, 150));
+        satisfactionView.setTranslateX(-375); // Positioned over the bear
+        satisfactionView.setTranslateY(-360); 
+        satisfactionView.setVisible(true);
+
+     	// 2. Add the Click Logic (This uses the logic from the Master branch)
+     	refillIcon.setOnMouseClicked(e -> {
+     		if (!refillPopup.isShowing()) refillPopup.show(stage);
+     	});
+
+     	serveIcon.setOnMouseClicked(e -> {
+     		com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+     		if (current != null) {
+     			audio.playClink();
+     			
+     			String recipe = playerRecipe[0].replaceAll(",$", "");
+     			boolean success = gameManager.serveCustomer(current, recipe);
+     			/* if (success) {
+     				// Show the smile on the bear
+     				satisfactionView.setVisible(true);
+     				new Timeline(new KeyFrame(Duration.seconds(2), ev -> satisfactionView.setVisible(false))).play();
+     			} */
+     			playerRecipe[0] = ""; 
+     			updateCustomerDisplay();
+     		}
+     	});
+
+     	// 3. Add them to the root - extra ones
+     	root.getChildren().addAll(refillIcon, serveIcon, satisfactionView);
+     	
+     	
+        root.setStyle("-fx-background-color: #FFCC80;");
         Scene scene = new Scene(root, 900, 1000);
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
