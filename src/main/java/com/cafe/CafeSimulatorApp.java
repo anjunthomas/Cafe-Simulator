@@ -70,6 +70,8 @@ public class CafeSimulatorApp extends Application {
                 drinkImagePath = "latte.png";
             } else if (drinkName.contains("Matcha")) {
                 drinkImagePath = "matcha.png";
+            } else if (drinkName.contains("Cold Brew")){
+                drinkImagePath = "coldBrew.png";
             }
 
             if (!drinkImagePath.isEmpty()) {
