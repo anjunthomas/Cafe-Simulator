@@ -6,8 +6,8 @@ import com.cafe.managers.GameManager;
 import com.cafe.managers.InventoryManager;
 import com.cafe.utils.AudioManager;
 import com.cafe.utils.ImageLoader;
-
 import com.cafe.utils.IngredientView;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -337,10 +337,24 @@ public class CafeSimulatorApp extends Application {
         /* setting up refill functionality with a popup  */
         javafx.stage.Popup refillPopup = new javafx.stage.Popup();
 
+        String cozyButtonStyle =
+            "-fx-background-color: #d7b899;" +   // latte color
+            "-fx-text-fill: #4a2e1f;" +
+            "-fx-font-weight: bold;" +
+            "-fx-background-radius: 15;" +
+            "-fx-border-radius: 15;" +
+            "-fx-border-color: #8b6f5e;" +
+            "-fx-padding: 8 15 8 15;";
+
         javafx.scene.layout.VBox popupContent = new javafx.scene.layout.VBox(10);
         popupContent.setStyle("-fx-background-color: #f5e6d3; -fx-padding: 15; -fx-border-color: #8b6f5e; -fx-border-width: 2;");
 
         javafx.scene.control.Label title = new javafx.scene.control.Label("Refill Ingredients");
+        title.setStyle(
+            "-fx-font-size: 20px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: #5c3b28;"   // dark mocha
+        );
 
         javafx.scene.control.Button refillMilk = new javafx.scene.control.Button("Refill Milk");
         javafx.scene.control.Button refillCoffee = new javafx.scene.control.Button("Refill Coffee");
@@ -350,17 +364,45 @@ public class CafeSimulatorApp extends Application {
         javafx.scene.control.Button closePopup = new javafx.scene.control.Button("Close");
 
         refillMilk.setOnMouseClicked(e -> milkView.refill());
+        refillMilk.setOnMouseEntered(e -> refillMilk.setEffect(glow));
+        refillMilk.setOnMouseExited(e -> refillMilk.setEffect(null));
 
         refillCoffee.setOnMouseClicked(e -> coffeeView.refill());
+        refillCoffee.setOnMouseEntered(e -> refillCoffee.setEffect(glow));
+        refillCoffee.setOnMouseExited(e -> refillCoffee.setEffect(null));
 
         refillSugar.setOnMouseClicked(e -> sugarView.refill());
+        refillSugar.setOnMouseEntered(e -> refillSugar.setEffect(glow));
+        refillSugar.setOnMouseExited(e -> refillSugar.setEffect(null));
 
         refillMatcha.setOnMouseClicked(e -> matchaView.refill());
+        refillMatcha.setOnMouseEntered(e -> refillMatcha.setEffect(glow));
+        refillMatcha.setOnMouseExited(e -> refillMatcha.setEffect(null));
 
         refillWater.setOnMouseClicked(e -> waterView.refill());
+        refillWater.setOnMouseEntered(e -> refillWater.setEffect(glow));
+        refillWater.setOnMouseExited(e -> refillWater.setEffect(null));
 
         closePopup.setOnMouseClicked(e -> refillPopup.hide());
+        closePopup.setOnMouseEntered(e -> closePopup.setEffect(glow));
+        closePopup.setOnMouseExited(e -> closePopup.setEffect(null));
+
+        refillMilk.setStyle(cozyButtonStyle);
+        refillCoffee.setStyle(cozyButtonStyle);
+        refillSugar.setStyle(cozyButtonStyle);
+        refillMatcha.setStyle(cozyButtonStyle);
+        refillWater.setStyle(cozyButtonStyle);
+        closePopup.setStyle(cozyButtonStyle);
+        
         popupContent.getChildren().addAll(title, refillMilk, refillCoffee, refillSugar, refillMatcha, refillWater, closePopup);
+        popupContent.setStyle(
+            "-fx-background-color: #f8f1e4;" +   // warm cream
+            "-fx-padding: 20;" +
+            "-fx-border-color: #a67c52;" +       // soft coffee brown
+            "-fx-border-width: 3;" +
+            "-fx-background-radius: 20;" +
+            "-fx-border-radius: 20;"
+        );
         refillPopup.getContent().add(popupContent);
 
         // the actual refill button
