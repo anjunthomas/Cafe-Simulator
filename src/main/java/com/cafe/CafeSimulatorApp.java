@@ -231,20 +231,6 @@ public class CafeSimulatorApp extends Application {
         spoonContainer.setTranslateY(280); 
         spoonContainer.setAlignment(javafx.geometry.Pos.CENTER); 
 
-        
-     // 1. Create the Spoon
-        ImageView testSpoon = new ImageView(ImageLoader.load("spoon.png", 50, 50));
-        testSpoon.setTranslateX(-200); // Moves it left of center
-        testSpoon.setTranslateY(-200); // Moves it toward the top
-
-        // 2. Create the Heart
-        ImageView testHeart = new ImageView(ImageLoader.load("heart1.png", 60, 60));
-        testHeart.setTranslateX(200);  // Moves it right of center
-        testHeart.setTranslateY(-200); // Moves it toward the top
-        
-        Image background = ImageLoader.load("newbackground.png", 1000, 1000);
-        ImageView backgroundView = new ImageView(background);
-
         /* PLANT */
 
         Image plant_decor = ImageLoader.load("Plant.png", 80, 80);
@@ -520,9 +506,6 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().remove(drinkIcon);
         root.getChildren().remove(spoonContainer);
         root.getChildren().addAll(messageBubble, drinkIcon, spoonContainer);
-        // Re-add them so they are the absolute top layers
-     // Add these to the very end of your start() method
-        root.getChildren().addAll(testSpoon, testHeart);
     }
 
     public static void main(String[] args) {
