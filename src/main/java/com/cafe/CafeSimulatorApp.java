@@ -160,8 +160,9 @@ public class CafeSimulatorApp extends Application {
         customerSprite.setTranslateY(300);
 
         orderLabel = new javafx.scene.control.Label();
-        orderLabel.setTranslateX(120);
-        orderLabel.setTranslateY(450);
+        orderLabel.setTranslateX(500);
+        orderLabel.setTranslateY(0);
+        orderLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px;");
 
         patienceBar = new ProgressBar();
         patienceBar.setTranslateX(120);
@@ -447,11 +448,10 @@ public class CafeSimulatorApp extends Application {
      	        boolean success = gameManager.serveCustomer(current, recipe);
 
      	        // TRIGGER IMAGES: Show heart for success, broken_heart for failure
-     	        String feedback = success ? "Heart.png" : "brokenheart.png";
-     	        updateCustomerDisplay(feedback);
+                drinkIcon.setImage(ImageLoader.load(success ? "Heart.png" : "brokenheart.png", 100, 100));
 
      	        // Wait 1 second for the player to see the result, then clear it
-     	        Timeline feedbackTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+     	        Timeline feedbackTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
      	            updateCustomerDisplay(null); // Return to showing order/next customer
      	        }));
      	        feedbackTimer.play();
