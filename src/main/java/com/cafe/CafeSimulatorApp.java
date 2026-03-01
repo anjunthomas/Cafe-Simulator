@@ -38,66 +38,82 @@ public class CafeSimulatorApp extends Application {
     private javafx.scene.control.Label orderLabel;
     private ProgressBar patienceBar;
     private javafx.scene.control.Label satisfactionLabel;
+    private javafx.scene.control.Label satisfactionScore;
 
     private javafx.scene.control.Label errorLabel;
 
     private void showError(String message) {
-        errorLabel.setText(message);
+        /*errorLabel.setText(message);
         errorLabel.setVisible(true);
 
         Timeline hideError = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
             errorLabel.setVisible(false);
         }));
-        hideError.play();
+        hideError.play();*/
+    	errorLabel.setText(message);
+        errorLabel.setStyle(
+            "-fx-background-color: rgba(230, 57, 70, 0.9);" + // Crimson Red
+            "-fx-text-fill: white;" + 
+            "-fx-padding: 10 20;" + 
+            "-fx-background-radius: 20;" + 
+            "-fx-font-weight: bold;" +
+            "-fx-font-size: 18px;"
+        );
+
+        errorLabel.setVisible(true);
+        
+        // Auto-hide after 2 seconds
+        Timeline hide = new Timeline(new KeyFrame(Duration.seconds(2), e -> errorLabel.setVisible(false)));
+        hide.play();
     }
 
-    private void updateCustomerDisplay() {
-        com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+    private void updateCustomerDisplay(String feedbackPath) {
+    	com.cafe.models.Customer current = gameManager.getCurrentCustomer();
 
         if (current != null) {
             customerSprite.setImage(ImageLoader.load(current.getSpritePath(), 450, 450));
             customerSprite.setVisible(true);
-
-            orderLabel.setText("Wants: " + current.getOrder().getName());
-            orderLabel.setVisible(true);
-
             messageBubble.setVisible(true);
+            
+            // Use the class-level satisfactionScore variable
+            satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
 
-            String drinkName = current.getOrder().getName();
-            String drinkImagePath = "";
-
-            if (drinkName.contains("Coffee")) {
-                drinkImagePath = "coffee.png";
-            } else if (drinkName.contains("Latte") && !drinkName.contains("Matcha")) {
-                drinkImagePath = "latte.png";
-            } else if (drinkName.contains("Matcha")) {
-                drinkImagePath = "matcha.png";
-            } else if (drinkName.contains("Cold Brew")){
-                drinkImagePath = "coldBrew.png";
-            }
-
-            if (!drinkImagePath.isEmpty()) {
-                drinkIcon.setImage(ImageLoader.load(drinkImagePath, 100, 100));
+            if (feedbackPath != null) {
+                // SHOW THE HEART (heart.png or broken_heart.png)
+                drinkIcon.setImage(ImageLoader.load(feedbackPath, 100, 100));
                 drinkIcon.setVisible(true);
+                orderLabel.setVisible(false); 
+            } else {
+                // DEFAULT: Show the drink order
+                String drinkName = current.getOrder().getName();
+                String drinkImagePath = "";
+                if (drinkName.contains("Coffee")) drinkImagePath = "coffee2.png";
+                else if (drinkName.contains("Latte") && !drinkName.contains("Matcha")) drinkImagePath = "latte.png";
+                else if (drinkName.contains("Matcha")) drinkImagePath = "matcha.png";
+                else if (drinkName.contains("Cold Brew")) drinkImagePath = "coldBrew.png";
+
+                if (!drinkImagePath.isEmpty()) {
+                    drinkIcon.setImage(ImageLoader.load(drinkImagePath, 100, 100));
+                    drinkIcon.setVisible(true);
+                }
+                orderLabel.setText("Wants: " + drinkName);
+                orderLabel.setVisible(true);
             }
 
-            // Show patience as text
             patienceLabel.setText("Patience: " + current.getPatience());
-            patienceLabel.setVisible(true);
-
             patienceBar.setProgress((double)current.getPatience() / current.getMaxPatience());
             patienceBar.setVisible(true);
-
+            patienceLabel.setVisible(true);
 
         } else {
             customerSprite.setVisible(false);
-            patienceLabel.setVisible(false);
-            patienceBar.setVisible(false);
             messageBubble.setVisible(false);
             drinkIcon.setVisible(false);
+            patienceBar.setVisible(false);
+            patienceLabel.setVisible(false);
+            orderLabel.setVisible(false);
         }
-
-        satisfactionLabel.setText("Satisfied: " + gameManager.getSatisfiedCount());
+        // satisfactionLabel.setText("Satisfied: " + gameManager.getSatisfiedCount());
     }
 
 
@@ -129,7 +145,7 @@ public class CafeSimulatorApp extends Application {
 
         Timeline gameLoop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             gameManager.update();
-            updateCustomerDisplay();
+            updateCustomerDisplay(null);
             espressoCount.setText("espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
             milkCount.setText("milk: " + inventory.getIngredient("milk").getCurrentAmount());
             matchaCount.setText("matcha: " + inventory.getIngredient("matcha").getCurrentAmount());
@@ -150,20 +166,20 @@ public class CafeSimulatorApp extends Application {
         patienceBar = new ProgressBar();
         patienceBar.setTranslateX(120);
         patienceBar.setTranslateY(470);
-
+/*
         satisfactionLabel = new javafx.scene.control.Label("Satisfied: 0");
         satisfactionLabel.setTranslateX(-370);
         satisfactionLabel.setTranslateY(-300);
-
-        messageBubble = new ImageView(ImageLoader.load("thought.png", 320, 220));
-        messageBubble.setTranslateX(40);
-        messageBubble.setTranslateY(250);
+*/
+        messageBubble = new ImageView(ImageLoader.load("bubble.png", 450, 300));
+        messageBubble.setTranslateX(-50);
+        messageBubble.setTranslateY(270);
         messageBubble.setVisible(false);
 
 // Drink icon inside bubble
         drinkIcon = new ImageView();
-        drinkIcon.setTranslateX(20);
-        drinkIcon.setTranslateY(200);
+        drinkIcon.setTranslateX(-30);
+        drinkIcon.setTranslateY(230);
         drinkIcon.setVisible(false);
 
         errorLabel = new javafx.scene.control.Label();
@@ -188,7 +204,7 @@ public class CafeSimulatorApp extends Application {
         Image plant_decor = ImageLoader.load("Plant.png", 80, 80);
         ImageView plant = new ImageView(plant_decor);
 
-        plant.setTranslateX(280);
+        plant.setTranslateX(360);
         plant.setTranslateY(-30);
 
         /* CUPS */
@@ -297,12 +313,20 @@ public class CafeSimulatorApp extends Application {
 
         Image cups_stack = ImageLoader.load("Cups_rack.png", 300, 300);
         ImageView cups = new ImageView(cups_stack);
+        
+        DropShadow goldGlow = new DropShadow();
+        goldGlow.setColor(Color.GOLD);
+        goldGlow.setRadius(20);
+        goldGlow.setSpread(0.6);
 
         cups.setPickOnBounds(false);
         cups.setOnMouseExited(e -> cups.setImage(cups_stack));
-        cups.setTranslateX(-140);
-        cups.setTranslateY(-250);
+        cups.setTranslateX(-129);
+        cups.setTranslateY(-251);
         cups.setRotate(0);
+        
+        cups.setOnMouseEntered(e -> cups.setEffect(goldGlow));
+        cups.setOnMouseExited(e -> cups.setEffect(null));
 
         cups.setOnMouseClicked(e -> {
             audio.playClink();
@@ -356,7 +380,7 @@ public class CafeSimulatorApp extends Application {
                 boolean success = gameManager.serveCustomer(current, recipe);
 
                 playerRecipe[0] = ""; // Reset
-                updateCustomerDisplay();
+                updateCustomerDisplay(null);
             }
         });
 
@@ -378,7 +402,7 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
         root.getChildren().add(refillBtn);
-        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, satisfactionLabel, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel);
         serveBtn.setVisible(false);
         refillBtn.setVisible(false);
         
@@ -392,41 +416,56 @@ public class CafeSimulatorApp extends Application {
         serveIcon.setTranslateX(390);
         serveIcon.setTranslateY(-330); 
         serveIcon.setPickOnBounds(true);
-
-        // Setup the Smile Icon
-        satisfactionView = new ImageView(ImageLoader.load("smile.png", 150, 150));
-        satisfactionView.setTranslateX(-375); // Positioned over the bear
+        
+        // Satisfaction Number
+        //javafx.scene.control.Label satisfactionScore = new javafx.scene.control.Label("0");
+        satisfactionScore = new javafx.scene.control.Label("0");
+        DropShadow scoreGlow = new DropShadow();
+        scoreGlow.setRadius(15.0);
+        scoreGlow.setColor(Color.rgb(245, 230, 211, 0.5));
+        satisfactionScore.setEffect(scoreGlow);
+        satisfactionScore.setStyle("-fx-font-size: 64px; -fx-text-fill: #F5E6D3; -fx-font-weight: bold;");
+        satisfactionScore.setTranslateX(-300); // Placed to the right of the smile
+        satisfactionScore.setTranslateY(-360);
+        // The Smile Icon
+        satisfactionView = new ImageView(ImageLoader.load("smiley.png", 150, 150));
+        satisfactionView.setTranslateX(-385); // Positioned over the bear
         satisfactionView.setTranslateY(-360); 
         satisfactionView.setVisible(true);
+        
 
-     	// 2. Add the Click Logic (This uses the logic from the Master branch)
      	refillIcon.setOnMouseClicked(e -> {
      		if (!refillPopup.isShowing()) refillPopup.show(stage);
      	});
+     	serveIcon.setOnMouseClicked(e -> {
+     	    com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+     	    if (current != null) {
+     	        audio.playClink();
+     	        String recipe = playerRecipe[0].replaceAll(",$", "");
+     	        
+     	        // Checks if the recipe is correct
+     	        boolean success = gameManager.serveCustomer(current, recipe);
 
-        serveIcon.setOnMouseClicked(e -> {
-            com.cafe.models.Customer current = gameManager.getCurrentCustomer();
-            if (current != null) {
-                audio.playClink();
+     	        // TRIGGER IMAGES: Show heart for success, broken_heart for failure
+     	        String feedback = success ? "Heart.png" : "brokenheart.png";
+     	        updateCustomerDisplay(feedback);
 
-                String recipe = playerRecipe[0].replaceAll(",$", "");
-                boolean success = gameManager.serveCustomer(current, recipe);
-                coffeeView.refreshImage();
-                milkView.refreshImage();
-                sugarView.refreshImage();
-                matchaView.refreshImage();
-                waterView.refreshImage();
-                playerRecipe[0] = "";
-                updateCustomerDisplay();
-            }
-        });
+     	        // Wait 1 second for the player to see the result, then clear it
+     	        Timeline feedbackTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+     	            updateCustomerDisplay(null); // Return to showing order/next customer
+     	        }));
+     	        feedbackTimer.play();
+
+     	        playerRecipe[0] = ""; 
+     	    }
+     	});
 
      	// 3. Add them to the root - extra ones
-     	root.getChildren().addAll(refillIcon, serveIcon, satisfactionView);
+     	root.getChildren().addAll(refillIcon, serveIcon, satisfactionView, satisfactionScore);
         root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
      	
      	
-        root.setStyle("-fx-background-color: #FFCC80;");
+        root.setStyle("-fx-background-color: #2E1A47;");
         Scene scene = new Scene(root, 900, 1000);
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
