@@ -33,13 +33,12 @@ public class CafeSimulatorApp extends Application {
     private ImageView drinkIcon;
     
     private ImageView satisfactionView;
-
+    private javafx.scene.layout.HBox spoonContainer;
     private javafx.scene.control.Label patienceLabel;
     private javafx.scene.control.Label orderLabel;
     private ProgressBar patienceBar;
     private javafx.scene.control.Label satisfactionLabel;
     private javafx.scene.control.Label satisfactionScore;
-
     private javafx.scene.control.Label errorLabel;
 
     private void showError(String message) {
@@ -68,18 +67,19 @@ public class CafeSimulatorApp extends Application {
     }
 
     private void updateCustomerDisplay(String feedbackPath) {
-    	com.cafe.models.Customer current = gameManager.getCurrentCustomer();
+        com.cafe.models.Customer current = gameManager.getCurrentCustomer();
 
         if (current != null) {
             customerSprite.setImage(ImageLoader.load(current.getSpritePath(), 450, 450));
             customerSprite.setVisible(true);
             messageBubble.setVisible(true);
             
-            // Use the class-level satisfactionScore variable
+            // Updates the numeric satisfaction score
             satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
 
             if (feedbackPath != null) {
-                // SHOW THE HEART (heart.png or broken_heart.png)
+                // Hide spoons when showing feedback (Heart/Broken Heart)
+                spoonContainer.setVisible(false); 
                 drinkIcon.setImage(ImageLoader.load(feedbackPath, 100, 100));
                 drinkIcon.setVisible(true);
                 orderLabel.setVisible(false); 
@@ -98,7 +98,34 @@ public class CafeSimulatorApp extends Application {
                 }
                 orderLabel.setText("Wants: " + drinkName);
                 orderLabel.setVisible(true);
-            }
+
+                spoonContainer.getChildren().clear(); 
+                
+                spoonContainer.getChildren().clear();
+                int sugarNeeded = 0;
+
+                if (drinkName.contains("1")) {
+                    sugarNeeded = 1;
+                } else if (drinkName.contains("2")) {
+                    sugarNeeded = 2;
+                }
+
+                // 3. Draw the spoons based on the parsed number
+                if (sugarNeeded > 0) {
+                    for (int i = 0; i < sugarNeeded; i++) {
+                        ImageView spoon = new ImageView(ImageLoader.load("spoon.png", 80, 80));
+                        DropShadow spoonBorder = new DropShadow();
+                        spoonBorder.setColor(Color.BLACK); 
+                        spoonBorder.setRadius(5);
+                        spoonBorder.setSpread(0.4); 
+                        spoon.setEffect(spoonBorder);
+                        spoonContainer.getChildren().add(spoon);
+                    }
+                    spoonContainer.setVisible(true);
+                } else {
+                    spoonContainer.setVisible(false);
+                }
+            } 
 
             patienceLabel.setText("Patience: " + current.getPatience());
             patienceBar.setProgress((double)current.getPatience() / current.getMaxPatience());
@@ -106,14 +133,15 @@ public class CafeSimulatorApp extends Application {
             patienceLabel.setVisible(true);
 
         } else {
+        
             customerSprite.setVisible(false);
             messageBubble.setVisible(false);
             drinkIcon.setVisible(false);
             patienceBar.setVisible(false);
             patienceLabel.setVisible(false);
             orderLabel.setVisible(false);
+            spoonContainer.setVisible(false);
         }
-        // satisfactionLabel.setText("Satisfied: " + gameManager.getSatisfiedCount());
     }
 
 
@@ -122,6 +150,11 @@ public class CafeSimulatorApp extends Application {
 
         AudioManager audio = new AudioManager(getClass());
         audio.playBackground();
+        
+        spoonContainer = new javafx.scene.layout.HBox(60); 
+        spoonContainer.setTranslateX(-50); // Center it with the bubble
+        spoonContainer.setTranslateY(500); // Position inside the bubble
+        spoonContainer.setVisible(false);
 
         javafx.scene.control.Label espressoCount = new javafx.scene.control.Label();
         espressoCount.setTranslateX(110);
@@ -178,8 +211,8 @@ public class CafeSimulatorApp extends Application {
 
 // Drink icon inside bubble
         drinkIcon = new ImageView();
-        drinkIcon.setTranslateX(-30);
-        drinkIcon.setTranslateY(230);
+        drinkIcon.setTranslateX(-50);
+        drinkIcon.setTranslateY(210);
         drinkIcon.setVisible(false);
 
         errorLabel = new javafx.scene.control.Label();
@@ -193,9 +226,22 @@ public class CafeSimulatorApp extends Application {
         patienceLabel.setTranslateY(420);
 
         final String[] playerRecipe = {""};
+      
+        spoonContainer.setTranslateX(-50); 
+        spoonContainer.setTranslateY(280); 
+        spoonContainer.setAlignment(javafx.geometry.Pos.CENTER); 
 
+        
+     // 1. Create the Spoon
+        ImageView testSpoon = new ImageView(ImageLoader.load("spoon.png", 50, 50));
+        testSpoon.setTranslateX(-200); // Moves it left of center
+        testSpoon.setTranslateY(-200); // Moves it toward the top
 
-
+        // 2. Create the Heart
+        ImageView testHeart = new ImageView(ImageLoader.load("heart1.png", 60, 60));
+        testHeart.setTranslateX(200);  // Moves it right of center
+        testHeart.setTranslateY(-200); // Moves it toward the top
+        
         Image background = ImageLoader.load("newbackground.png", 1000, 1000);
         ImageView backgroundView = new ImageView(background);
 
@@ -402,7 +448,7 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
         root.getChildren().add(refillBtn);
-        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel, spoonContainer);
         serveBtn.setVisible(false);
         refillBtn.setVisible(false);
         
@@ -447,7 +493,7 @@ public class CafeSimulatorApp extends Application {
      	        boolean success = gameManager.serveCustomer(current, recipe);
 
      	        // TRIGGER IMAGES: Show heart for success, broken_heart for failure
-     	        String feedback = success ? "Heart.png" : "brokenheart.png";
+     	        String feedback = success ? "heart1.png" : "brokenheart.png";
      	        updateCustomerDisplay(feedback);
 
      	        // Wait 1 second for the player to see the result, then clear it
@@ -470,6 +516,13 @@ public class CafeSimulatorApp extends Application {
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
         stage.show();
+        root.getChildren().remove(messageBubble);
+        root.getChildren().remove(drinkIcon);
+        root.getChildren().remove(spoonContainer);
+        root.getChildren().addAll(messageBubble, drinkIcon, spoonContainer);
+        // Re-add them so they are the absolute top layers
+     // Add these to the very end of your start() method
+        root.getChildren().addAll(testSpoon, testHeart);
     }
 
     public static void main(String[] args) {
