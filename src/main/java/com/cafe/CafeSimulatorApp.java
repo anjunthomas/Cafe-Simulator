@@ -238,9 +238,6 @@ public class CafeSimulatorApp extends Application {
         spoonContainer.setTranslateY(280); 
         spoonContainer.setAlignment(javafx.geometry.Pos.CENTER);
 
-        Image background = ImageLoader.load("newbackground.png", 1000, 1000);
-        ImageView backgroundView = new ImageView(background);
-
         /* PLANT */
 
         Image plant_decor = ImageLoader.load("Plant.png", 80, 80);

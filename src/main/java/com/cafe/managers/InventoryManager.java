@@ -18,7 +18,7 @@ public class InventoryManager {
         ingredients.put("milk", new Ingredient("milk", 3, "milk.png", "milk_empty.png"));
         ingredients.put("espresso", new Ingredient("espresso", 3, "coffeebeans.png", "coffeebeansempty.png"));
         ingredients.put("cups", new Ingredient("cups", 99999999, "Cups_rack.png", "Cups_rack.png"));
-        ingredients.put("sugar", new Ingredient("sugar", 5, "sugar.png", "sugar.png"));
+        ingredients.put("sugar", new Ingredient("sugar", 5, "sugar.png", "sugarempty.png"));
         ingredients.put("water", new Ingredient("water", 3, "waterfull.png", "water_empty.png"));
         ingredients.put("matcha", new Ingredient("matcha", 3, "matchafull.png", "matcha_empty.png"));
     }
