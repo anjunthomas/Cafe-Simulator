@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.animation.FadeTransition;
 
 public class CafeSimulatorApp extends Application {
 
@@ -40,6 +41,9 @@ public class CafeSimulatorApp extends Application {
     private javafx.scene.control.Label satisfactionLabel;
     private javafx.scene.control.Label satisfactionScore;
     private javafx.scene.control.Label errorLabel;
+    private AudioManager audio;
+    private com.cafe.models.Customer lastCustomer = null;
+    private boolean showingFeedback = false;
 
     private void showError(String message) {
         /*errorLabel.setText(message);
@@ -70,12 +74,33 @@ public class CafeSimulatorApp extends Application {
         com.cafe.models.Customer current = gameManager.getCurrentCustomer();
 
         if (current != null) {
-            customerSprite.setImage(ImageLoader.load(current.getSpritePath(), 450, 450));
-            customerSprite.setVisible(true);
+            if (current != lastCustomer) {
+                audio.playShopBellSound();
+                lastCustomer = current;
+
+                customerSprite.setImage(ImageLoader.load(current.getSpritePath(), 450, 450));
+                customerSprite.setOpacity(0);
+                customerSprite.setVisible(true);
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(500), customerSprite);
+                fadeIn.setFromValue(0);
+                fadeIn.setToValue(1);
+                fadeIn.setOnFinished(ev -> {
+                    drinkIcon.setVisible(true);
+                    patienceBar.setVisible(true);
+                    patienceLabel.setVisible(true);
+                    spoonContainer.setVisible(true);
+                });
+                fadeIn.play();
+
+                messageBubble.setOpacity(0);
+                messageBubble.setVisible(true);
+                FadeTransition bubbleFadeIn = new FadeTransition(Duration.millis(500), messageBubble);
+                bubbleFadeIn.setFromValue(0);
+                bubbleFadeIn.setToValue(1);
+                bubbleFadeIn.play();
+            }
+
             messageBubble.setVisible(true);
-            
-            // Updates the numeric satisfaction score
-            satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
 
             if (feedbackPath != null) {
                 // Hide spoons when showing feedback (Heart/Broken Heart)
@@ -128,7 +153,17 @@ public class CafeSimulatorApp extends Application {
             } 
 
             patienceLabel.setText("Patience: " + current.getPatience());
-            patienceBar.setProgress((double)current.getPatience() / current.getMaxPatience());
+            double progress = (double) current.getPatience() / current.getMaxPatience();
+            patienceBar.setProgress(progress);
+
+            if (progress > 0.6) {
+                patienceBar.setStyle("-fx-accent: green; -fx-border-color: black; -fx-border-width: 1;");
+            } else if (progress > 0.3) {
+                patienceBar.setStyle("-fx-accent: orange; -fx-border-color: black; -fx-border-width: 1;");
+            } else {
+                patienceBar.setStyle("-fx-accent: red; -fx-border-color: black; -fx-border-width: 1;");
+            }
+
             patienceBar.setVisible(true);
             patienceLabel.setVisible(true);
 
@@ -151,7 +186,7 @@ public class CafeSimulatorApp extends Application {
         Image background = ImageLoader.load("newbackground.png", 1000, 1000);
         ImageView backgroundView = new ImageView(background);
 
-        AudioManager audio = new AudioManager(getClass());
+        audio = new AudioManager(getClass());
         audio.playBackground();
         
         spoonContainer = new javafx.scene.layout.HBox(60); 
@@ -182,7 +217,7 @@ public class CafeSimulatorApp extends Application {
 
         Timeline gameLoop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             gameManager.update();
-            updateCustomerDisplay(null);
+            if (!showingFeedback) updateCustomerDisplay(null);
             // espressoCount.setText("espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
             // milkCount.setText("milk: " + inventory.getIngredient("milk").getCurrentAmount());
             // matchaCount.setText("matcha: " + inventory.getIngredient("matcha").getCurrentAmount());
@@ -202,8 +237,12 @@ public class CafeSimulatorApp extends Application {
         orderLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px;");
 
         patienceBar = new ProgressBar();
-        patienceBar.setTranslateX(120);
-        patienceBar.setTranslateY(470);
+        patienceBar.setRotate(-90);
+        patienceBar.setPrefWidth(250);
+        patienceBar.setPrefHeight(30);
+        patienceBar.setTranslateX(450);
+        patienceBar.setTranslateY(300);
+        patienceBar.setStyle("-fx-accent: green; -fx-border-color: black; -fx-border-width: 1;");
 /*
         satisfactionLabel = new javafx.scene.control.Label("Satisfied: 0");
         satisfactionLabel.setTranslateX(-370);
@@ -401,27 +440,27 @@ public class CafeSimulatorApp extends Application {
         javafx.scene.control.Button refillWater = new javafx.scene.control.Button("Refill Water");
         javafx.scene.control.Button closePopup = new javafx.scene.control.Button("Close");
 
-        refillMilk.setOnMouseClicked(e -> milkView.refill());
+        refillMilk.setOnMouseClicked(e -> { audio.playButtonSound(); milkView.refill(); });
         refillMilk.setOnMouseEntered(e -> refillMilk.setEffect(glow));
         refillMilk.setOnMouseExited(e -> refillMilk.setEffect(null));
 
-        refillCoffee.setOnMouseClicked(e -> coffeeView.refill());
+        refillCoffee.setOnMouseClicked(e -> { audio.playButtonSound(); coffeeView.refill(); });
         refillCoffee.setOnMouseEntered(e -> refillCoffee.setEffect(glow));
         refillCoffee.setOnMouseExited(e -> refillCoffee.setEffect(null));
 
-        refillSugar.setOnMouseClicked(e -> sugarView.refill());
+        refillSugar.setOnMouseClicked(e -> { audio.playButtonSound(); sugarView.refill(); });
         refillSugar.setOnMouseEntered(e -> refillSugar.setEffect(glow));
         refillSugar.setOnMouseExited(e -> refillSugar.setEffect(null));
 
-        refillMatcha.setOnMouseClicked(e -> matchaView.refill());
+        refillMatcha.setOnMouseClicked(e -> { audio.playButtonSound(); matchaView.refill(); });
         refillMatcha.setOnMouseEntered(e -> refillMatcha.setEffect(glow));
         refillMatcha.setOnMouseExited(e -> refillMatcha.setEffect(null));
 
-        refillWater.setOnMouseClicked(e -> waterView.refill());
+        refillWater.setOnMouseClicked(e -> { audio.playButtonSound(); waterView.refill(); });
         refillWater.setOnMouseEntered(e -> refillWater.setEffect(glow));
         refillWater.setOnMouseExited(e -> refillWater.setEffect(null));
 
-        closePopup.setOnMouseClicked(e -> refillPopup.hide());
+        closePopup.setOnMouseClicked(e -> { audio.playButtonSound(); refillPopup.hide(); });
         closePopup.setOnMouseEntered(e -> closePopup.setEffect(glow));
         closePopup.setOnMouseExited(e -> closePopup.setEffect(null));
 
@@ -459,6 +498,10 @@ public class CafeSimulatorApp extends Application {
             if (current != null) {
                 String recipe = playerRecipe[0].replaceAll(",$", ""); // Remove trailing comma
                 boolean success = gameManager.serveCustomer(current, recipe);
+
+                if (success) {
+                    satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
+                }
 
                 playerRecipe[0] = ""; // Reset
                 updateCustomerDisplay(null);
@@ -576,30 +619,52 @@ public class CafeSimulatorApp extends Application {
         
 
      	refillIcon.setOnMouseClicked(e -> {
+            audio.playButtonSound();
      		if (!refillPopup.isShowing()) refillPopup.show(stage);
      	});
      	serveIcon.setOnMouseClicked(e -> {
      	    com.cafe.models.Customer current = gameManager.getCurrentCustomer();
      	    if (current != null) {
-     	        audio.playClink();
+                audio.playCashRegisterSound();
      	        String recipe = playerRecipe[0].replaceAll(",$", "");
      	        
      	        // Checks if the recipe is correct
      	        boolean success = gameManager.serveCustomer(current, recipe);
 
-     	        // TRIGGER IMAGES: Show heart for success, broken_heart for failure
-                drinkIcon.setImage(ImageLoader.load(success ? "Heart.png" : "brokenheart.png", 100, 100));
 
      	        // Wait 1 second for the player to see the result, then clear it
-     	        Timeline feedbackTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
-     	            updateCustomerDisplay(null); // Return to showing order/next customer
-     	        }));
+     	        showingFeedback = true;
+                 spoonContainer.setVisible(false);
+                drinkIcon.setImage(ImageLoader.load(success ? "Heart.png" : "brokenheart.png", 100, 100));
+                Timeline feedbackTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+                    FadeTransition fadeOut = new FadeTransition(Duration.millis(500), customerSprite);
+                    fadeOut.setFromValue(1);
+                    fadeOut.setToValue(0);
+
+                    FadeTransition bubbleFadeOut = new FadeTransition(Duration.millis(500), messageBubble);
+                    bubbleFadeOut.setFromValue(1);
+                    bubbleFadeOut.setToValue(0);
+
+                    fadeOut.setOnFinished(ev -> {
+                        showingFeedback = false;
+                        gameManager.removeCurrentCustomer();
+                        lastCustomer = null; // reset so next customer fades in
+                        updateCustomerDisplay(null);
+                    });
+                    drinkIcon.setVisible(false);
+                    patienceBar.setVisible(false);
+                    patienceLabel.setVisible(false);
+                    spoonContainer.setVisible(false);
+                    fadeOut.play();
+                    bubbleFadeOut.play();
+                }));
      	        feedbackTimer.play();
 
      	        playerRecipe[0] = ""; 
      	    }
      	});
         recipeBook.setOnMouseClicked(e -> {
+            audio.playBookSound();
             if (!recipePopup.isShowing()) {
 
                 dimOverlay.setVisible(true);

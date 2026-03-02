@@ -58,6 +58,11 @@ public class GameManager {
         }
     }
 
+    public void removeCurrentCustomer() {
+        customerManager.removeCurrentCustomer();
+        lastCustomerLeftTime = System.currentTimeMillis();
+    }
+
 
 
     public List<Drink> getAvailableDrinks() {
@@ -83,8 +88,8 @@ public class GameManager {
         }
 
 
-        customerManager.removeCurrentCustomer();
-        lastCustomerLeftTime = System.currentTimeMillis();
+        //customerManager.removeCurrentCustomer();
+        //lastCustomerLeftTime = System.currentTimeMillis();
         satisfiedCount++;
         return true;
     }

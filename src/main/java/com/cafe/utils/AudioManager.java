@@ -18,10 +18,18 @@ public class AudioManager {
 
     private MediaPlayer sugarBagSound;
 
+    private MediaPlayer bookSound;
+
+    private MediaPlayer buttonSound;
+
+    private MediaPlayer cashRegisterSound;
+
+    private MediaPlayer shopbellSound;
+
     public AudioManager(Class<?> resourceClass) {
         backgroundMusic = new MediaPlayer(new Media(resourceClass.getResource("/audio/cafebackgroundsong.mp3").toString()));
         backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE);
-        backgroundMusic.setVolume(0.15);
+        backgroundMusic.setVolume(0.07);
 
         clinkSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/CupclinkSound.mp3").toString()));
         matchaBagCrunchSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/matchaBag.mp3").toString()));
@@ -30,6 +38,10 @@ public class AudioManager {
         coffeeGrindingSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/CoffeeGrinder1.mp3").toString()));
         coffeeCrunchSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/CoffeeCrunch.mp3").toString()));
         sugarBagSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/Sugar.mp3").toString()));
+        bookSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/bookSound.mp3").toString()));
+        buttonSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/buttonSound.mp3").toString()));
+        cashRegisterSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/cashRegisterSound.wav").toString()));
+        shopbellSound = new MediaPlayer(new Media(resourceClass.getResource("/audio/shopbellSound.mp3").toString()));
 
         sugarBagSound.setVolume(0.3);
     }
@@ -70,4 +82,26 @@ public class AudioManager {
         sugarBagSound.seek(sugarBagSound.getStartTime());
         sugarBagSound.play();
     }
+
+    public void playBookSound() {
+        bookSound.seek(bookSound.getStartTime());
+        bookSound.play();
+    }
+
+    public void playButtonSound() {
+        buttonSound.seek(buttonSound.getStartTime());
+        buttonSound.play();
+    }
+
+    public void playCashRegisterSound() {
+        cashRegisterSound.seek(cashRegisterSound.getStartTime());
+        cashRegisterSound.play();
+    }
+
+    public void playShopBellSound() {
+        shopbellSound.seek(shopbellSound.getStartTime());
+        shopbellSound.play();
+    }
+
+
 }
