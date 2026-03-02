@@ -148,6 +148,9 @@ public class CafeSimulatorApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+        Image background = ImageLoader.load("newbackground.png", 1000, 1000);
+        ImageView backgroundView = new ImageView(background);
+
         AudioManager audio = new AudioManager(getClass());
         audio.playBackground();
         
@@ -155,6 +158,7 @@ public class CafeSimulatorApp extends Application {
         spoonContainer.setTranslateX(-50); // Center it with the bubble
         spoonContainer.setTranslateY(500); // Position inside the bubble
         spoonContainer.setVisible(false);
+        spoonContainer.setMouseTransparent(true);
 
         javafx.scene.control.Label espressoCount = new javafx.scene.control.Label();
         espressoCount.setTranslateX(110);
@@ -209,13 +213,15 @@ public class CafeSimulatorApp extends Application {
         messageBubble.setTranslateX(-50);
         messageBubble.setTranslateY(270);
         messageBubble.setVisible(false);
-
+        messageBubble.setMouseTransparent(true);
+        
 // Drink icon inside bubble
         drinkIcon = new ImageView();
         drinkIcon.setTranslateX(-50);
         drinkIcon.setTranslateY(210);
         drinkIcon.setVisible(false);
-
+        drinkIcon.setMouseTransparent(true);
+        
         errorLabel = new javafx.scene.control.Label();
         errorLabel.setTranslateX(0);
         errorLabel.setTranslateY(-350);
