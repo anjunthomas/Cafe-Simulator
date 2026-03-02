@@ -482,31 +482,6 @@ public class CafeSimulatorApp extends Application {
         );
         refillPopup.getContent().add(popupContent);
 
-        // the actual refill button
-        javafx.scene.control.Button refillBtn = new javafx.scene.control.Button("Refill");
-        refillBtn.setTranslateX(370);
-        refillBtn.setTranslateY(-420);
-        refillBtn.setOnMouseClicked(e -> {
-            refillPopup.show(stage);
-        });
-
-        javafx.scene.control.Button serveBtn = new javafx.scene.control.Button("Serve");
-        serveBtn.setTranslateX(370);
-        serveBtn.setTranslateY(-390);
-        serveBtn.setOnMouseClicked(e -> {
-            com.cafe.models.Customer current = gameManager.getCurrentCustomer();
-            if (current != null) {
-                String recipe = playerRecipe[0].replaceAll(",$", ""); // Remove trailing comma
-                boolean success = gameManager.serveCustomer(current, recipe);
-
-                if (success) {
-                    satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
-                }
-
-                playerRecipe[0] = ""; // Reset
-                updateCustomerDisplay(null);
-            }
-        });
 
         javafx.scene.layout.StackPane dimOverlay = new javafx.scene.layout.StackPane();
         dimOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.45);");
@@ -580,10 +555,7 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(plant);
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
-        root.getChildren().add(refillBtn);
-        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, serveBtn, drinkIcon, patienceLabel, errorLabel, spoonContainer);
-        serveBtn.setVisible(false);
-        refillBtn.setVisible(false);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, drinkIcon, patienceLabel, errorLabel, spoonContainer);
         
      // Create Image Buttons with matching sizes
         ImageView refillIcon = new ImageView(ImageLoader.load("refill.png", 195, 195));
@@ -627,9 +599,13 @@ public class CafeSimulatorApp extends Application {
      	    if (current != null) {
                 audio.playCashRegisterSound();
      	        String recipe = playerRecipe[0].replaceAll(",$", "");
-     	        
+
      	        // Checks if the recipe is correct
      	        boolean success = gameManager.serveCustomer(current, recipe);
+
+                if (success) {
+                    satisfactionScore.setText(String.valueOf(gameManager.getSatisfiedCount()));
+                }
 
 
      	        // Wait 1 second for the player to see the result, then clear it
@@ -660,7 +636,7 @@ public class CafeSimulatorApp extends Application {
                 }));
      	        feedbackTimer.play();
 
-     	        playerRecipe[0] = ""; 
+     	        playerRecipe[0] = "";
      	    }
      	});
         recipeBook.setOnMouseClicked(e -> {
@@ -683,7 +659,6 @@ public class CafeSimulatorApp extends Application {
             }
         });
 
-     	// 3. Add them to the root - extra ones
         root.getChildren().addAll(refillIcon, serveIcon, recipeBook, satisfactionView, satisfactionScore);
         // root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
      	
@@ -700,33 +675,6 @@ public class CafeSimulatorApp extends Application {
     }
 
     public static void main(String[] args) {
-        /*InventoryManager inventory = new InventoryManager(); // this initializes the ingredients for us: puts them in the hashmap and adds the maxAmount
-
-        // testing hasIngredient
-        System.out.println("Has milk: " + inventory.hasIngredient("milk")); // true
-        System.out.println("Has milk: " + inventory.hasIngredient("xyz")); // false
-
-        System.out.println("Starting amount of milk: " + inventory.getIngredient("milk").getCurrentAmount());
-        System.out.println("Starting amount of espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
-        System.out.println("Starting amount of cups: " + inventory.getIngredient("cups").getCurrentAmount());
-
-        // testing useIngredient works
-        inventory.useIngredient("milk");
-        System.out.println("Milk after use: " + inventory.getIngredient("milk").getCurrentAmount()); // decrementing it from 10 to 9
-
-        // Test canMakeRecipe
-        System.out.println("Can make latte: " + inventory.canMakeRecipe("milk,espresso,cups")); // should print true, all the ingredients were initialized when we called the InventoryManager
-
-        System.out.println("Making latte....!");
-        // Test useIngredients to make a recipe
-        inventory.useIngredients("milk,espresso,cups");
-        System.out.println("Milk after recipe: " + inventory.getIngredient("milk").getCurrentAmount());
-        System.out.println("Espresso after recipe: " + inventory.getIngredient("espresso").getCurrentAmount());
-        System.out.println("Cups after recipe: " + inventory.getIngredient("cups").getCurrentAmount());
-
-        // Test refill
-        inventory.refillIngredient("milk"); // this will refill the ingredient passed in to the max amount (10 milk)
-        System.out.println("Milk after refill: " + inventory.getIngredient("milk").getCurrentAmount()); */
         launch();
     }
 }
