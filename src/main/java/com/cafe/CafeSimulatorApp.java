@@ -97,7 +97,7 @@ public class CafeSimulatorApp extends Application {
                     drinkIcon.setVisible(true);
                 }
                 orderLabel.setText("Wants: " + drinkName);
-                orderLabel.setVisible(true);
+                orderLabel.setVisible(false);
 
                 spoonContainer.getChildren().clear(); 
                 
@@ -160,34 +160,34 @@ public class CafeSimulatorApp extends Application {
         spoonContainer.setVisible(false);
         spoonContainer.setMouseTransparent(true);
 
-        javafx.scene.control.Label espressoCount = new javafx.scene.control.Label();
-        espressoCount.setTranslateX(110);
-        espressoCount.setTranslateY(120);
+        // javafx.scene.control.Label espressoCount = new javafx.scene.control.Label();
+        // espressoCount.setTranslateX(110);
+        // espressoCount.setTranslateY(120);
 
-        javafx.scene.control.Label milkCount = new javafx.scene.control.Label();
-        milkCount.setTranslateX(-200);
-        milkCount.setTranslateY(80);
+        // javafx.scene.control.Label milkCount = new javafx.scene.control.Label();
+        // milkCount.setTranslateX(-200);
+        // milkCount.setTranslateY(80);
 
-        javafx.scene.control.Label matchaCount = new javafx.scene.control.Label();
-        matchaCount.setTranslateX(260);
-        matchaCount.setTranslateY(130);
+        // javafx.scene.control.Label matchaCount = new javafx.scene.control.Label();
+        // matchaCount.setTranslateX(260);
+        // matchaCount.setTranslateY(130);
 
-        javafx.scene.control.Label waterCount = new javafx.scene.control.Label();
-        waterCount.setTranslateX(-130);
-        waterCount.setTranslateY(20);
+        // javafx.scene.control.Label waterCount = new javafx.scene.control.Label();
+        // waterCount.setTranslateX(-130);
+        // waterCount.setTranslateY(20);
 
-        javafx.scene.control.Label sugarCount = new javafx.scene.control.Label();
-        sugarCount.setTranslateX(-280);
-        sugarCount.setTranslateY(110);
+        // javafx.scene.control.Label sugarCount = new javafx.scene.control.Label();
+        // sugarCount.setTranslateX(-280);
+        // sugarCount.setTranslateY(110);
 
         Timeline gameLoop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             gameManager.update();
             updateCustomerDisplay(null);
-            espressoCount.setText("espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
-            milkCount.setText("milk: " + inventory.getIngredient("milk").getCurrentAmount());
-            matchaCount.setText("matcha: " + inventory.getIngredient("matcha").getCurrentAmount());
-            waterCount.setText("water: " + inventory.getIngredient("water").getCurrentAmount());
-            sugarCount.setText("sugar: " + inventory.getIngredient("sugar").getCurrentAmount());
+            // espressoCount.setText("espresso: " + inventory.getIngredient("espresso").getCurrentAmount());
+            // milkCount.setText("milk: " + inventory.getIngredient("milk").getCurrentAmount());
+            // matchaCount.setText("matcha: " + inventory.getIngredient("matcha").getCurrentAmount());
+            // waterCount.setText("water: " + inventory.getIngredient("water").getCurrentAmount());
+            // sugarCount.setText("sugar: " + inventory.getIngredient("sugar").getCurrentAmount());
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         gameLoop.play();
@@ -465,9 +465,64 @@ public class CafeSimulatorApp extends Application {
             }
         });
 
+        javafx.scene.layout.StackPane dimOverlay = new javafx.scene.layout.StackPane();
+        dimOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.45);");
+        dimOverlay.setVisible(false);
+        dimOverlay.setPickOnBounds(true); // blocks clicks behind it
+        dimOverlay.setPrefSize(900, 1000); // same size as scene
+
+        javafx.stage.Popup recipePopup = new javafx.stage.Popup();
+
+        StackPane recipePane = new StackPane();
+        recipePane.setStyle(
+            "-fx-background-color: #f8f1e4;" +
+            "-fx-border-color: #a67c52;" +
+            "-fx-border-width: 3;" +
+            "-fx-background-radius: 20;" +
+            "-fx-border-radius: 20;"
+        );
+        ImageView recipeImage = new ImageView(ImageLoader.load("recipebook.png"));
+        recipeImage.setFitWidth(700);
+        recipeImage.setPreserveRatio(true);
+
+        javafx.scene.control.Label reminderText = new javafx.scene.control.Label(
+            "Reminder: Click the cups first before starting an order!"
+        );
+
+        reminderText.setStyle(
+            "-fx-font-size: 25px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: #5c3b28;" +
+            "-fx-background-color: rgba(248, 241, 228, 0.9);" +
+            "-fx-padding: 8 15 8 15;" +
+            "-fx-background-radius: 15;"
+        );
+
+        reminderText.setTranslateY(-300);
+
+        javafx.scene.control.Button closeRecipe = new javafx.scene.control.Button("❌");
+        closeRecipe.setStyle(
+            "-fx-background-color: #a67c52;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-weight: bold;" +
+            "-fx-font-size: 22px;" +
+            "-fx-background-radius: 15;"
+        );
+        closeRecipe.setTranslateX(300);
+        closeRecipe.setTranslateY(-250);
+
+        closeRecipe.setOnMouseClicked(e -> {
+            recipePopup.hide();
+            dimOverlay.setVisible(false);
+        });
+
+        recipePane.getChildren().addAll(recipeImage, reminderText, closeRecipe);
+        recipePopup.getContent().add(recipePane);
+
 
         // the StackPane lets us layer images on top of each other
         StackPane root = new StackPane();
+        root.getChildren().add(dimOverlay);
         root.getChildren().add(backgroundView);
         //root.getChildren().add(cup_stack);
         root.getChildren().add(coffeeView.getImageView());
@@ -497,6 +552,11 @@ public class CafeSimulatorApp extends Application {
         serveIcon.setTranslateX(390);
         serveIcon.setTranslateY(-330); 
         serveIcon.setPickOnBounds(true);
+
+        ImageView recipeBook = new ImageView(ImageLoader.load("recipebookbutton.png", 200, 200));
+        recipeBook.setTranslateX(390);
+        recipeBook.setTranslateY(-230); 
+        recipeBook.setPickOnBounds(true);
         
         // Satisfaction Number
         //javafx.scene.control.Label satisfactionScore = new javafx.scene.control.Label("0");
@@ -539,10 +599,28 @@ public class CafeSimulatorApp extends Application {
      	        playerRecipe[0] = ""; 
      	    }
      	});
+        recipeBook.setOnMouseClicked(e -> {
+            if (!recipePopup.isShowing()) {
+
+                dimOverlay.setVisible(true);
+                recipePopup.show(stage);
+
+                recipePane.applyCss();
+                recipePane.layout();
+
+                recipePopup.setX(
+                    stage.getX() + (stage.getWidth() - recipePane.getWidth()) / 2
+                );
+
+                recipePopup.setY(
+                    stage.getY() + (stage.getHeight() - recipePane.getHeight()) / 2
+                );
+            }
+        });
 
      	// 3. Add them to the root - extra ones
-     	root.getChildren().addAll(refillIcon, serveIcon, satisfactionView, satisfactionScore);
-        root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
+        root.getChildren().addAll(refillIcon, serveIcon, recipeBook, satisfactionView, satisfactionScore);
+        // root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
      	
      	
         root.setStyle("-fx-background-color: #2E1A47;");
