@@ -279,11 +279,11 @@ public class CafeSimulatorApp extends Application {
 
         /* PLANT */
 
-        Image plant_decor = ImageLoader.load("Plant.png", 80, 80);
+        Image plant_decor = ImageLoader.load("Plant.png", 150, 150);
         ImageView plant = new ImageView(plant_decor);
 
-        plant.setTranslateX(360);
-        plant.setTranslateY(-30);
+        plant.setTranslateX(320);
+        plant.setTranslateY(-10);
 
         /* CUPS */
 
@@ -559,18 +559,18 @@ public class CafeSimulatorApp extends Application {
         
      // Create Image Buttons with matching sizes
         ImageView refillIcon = new ImageView(ImageLoader.load("refill.png", 195, 195));
-        refillIcon.setTranslateX(380); 
+        refillIcon.setTranslateX(380);
         refillIcon.setTranslateY(-400);
         refillIcon.setPickOnBounds(true); 
 
         ImageView serveIcon = new ImageView(ImageLoader.load("serve.png", 220, 220));
         serveIcon.setTranslateX(390);
-        serveIcon.setTranslateY(-330); 
+        serveIcon.setTranslateY(-330);
         serveIcon.setPickOnBounds(true);
 
         ImageView recipeBook = new ImageView(ImageLoader.load("recipebookbutton.png", 200, 200));
         recipeBook.setTranslateX(390);
-        recipeBook.setTranslateY(-230); 
+        recipeBook.setTranslateY(-230);
         recipeBook.setPickOnBounds(true);
         
         // Satisfaction Number
@@ -584,16 +584,40 @@ public class CafeSimulatorApp extends Application {
         satisfactionScore.setTranslateX(-300); // Placed to the right of the smile
         satisfactionScore.setTranslateY(-360);
         // The Smile Icon
-        satisfactionView = new ImageView(ImageLoader.load("smiley.png", 150, 150));
-        satisfactionView.setTranslateX(-385); // Positioned over the bear
-        satisfactionView.setTranslateY(-360); 
-        satisfactionView.setVisible(true);
-        
+        javafx.scene.layout.VBox satisfactionPanel = new javafx.scene.layout.VBox(5);
+        satisfactionPanel.setStyle(
+                "-fx-background-color: #F5E6D3;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-border-color: #a67c52;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-border-radius: 20;" +
+                        "-fx-padding: 10 20;"
+        );
+        satisfactionPanel.setAlignment(javafx.geometry.Pos.CENTER);
+        satisfactionPanel.setTranslateX(-330);
+        satisfactionPanel.setTranslateY(-390);
+        satisfactionPanel.setMaxSize(200, 100);
+
+        javafx.scene.control.Label happyLabel = new javafx.scene.control.Label("Happy Customers");
+        happyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #5c3b28; -fx-font-weight: bold;");
+
+        javafx.scene.layout.HBox scoreRow = new javafx.scene.layout.HBox(10);
+        scoreRow.setAlignment(javafx.geometry.Pos.CENTER);
+
+        satisfactionView = new ImageView(ImageLoader.load("smiley.png", 60, 60));
+        satisfactionScore = new javafx.scene.control.Label("0");
+        satisfactionScore.setStyle("-fx-font-size: 36px; -fx-text-fill: #5c3b28; -fx-font-weight: bold;");
+
+        scoreRow.getChildren().addAll(satisfactionView, satisfactionScore);
+        satisfactionPanel.getChildren().addAll(happyLabel, scoreRow);
 
      	refillIcon.setOnMouseClicked(e -> {
             audio.playButtonSound();
      		if (!refillPopup.isShowing()) refillPopup.show(stage);
      	});
+        refillIcon.setOnMouseEntered(e -> refillIcon.setEffect(glow));
+        refillIcon.setOnMouseExited(e -> refillIcon.setEffect(null));
+
      	serveIcon.setOnMouseClicked(e -> {
      	    com.cafe.models.Customer current = gameManager.getCurrentCustomer();
      	    if (current != null) {
@@ -639,6 +663,8 @@ public class CafeSimulatorApp extends Application {
      	        playerRecipe[0] = "";
      	    }
      	});
+        serveIcon.setOnMouseEntered(e -> serveIcon.setEffect(glow));
+        serveIcon.setOnMouseExited(e -> serveIcon.setEffect(null));
         recipeBook.setOnMouseClicked(e -> {
             audio.playBookSound();
             if (!recipePopup.isShowing()) {
@@ -658,12 +684,14 @@ public class CafeSimulatorApp extends Application {
                 );
             }
         });
+        recipeBook.setOnMouseEntered(e -> recipeBook.setEffect(glow));
+        recipeBook.setOnMouseExited(e -> recipeBook.setEffect(null));
 
-        root.getChildren().addAll(refillIcon, serveIcon, recipeBook, satisfactionView, satisfactionScore);
+        root.getChildren().addAll(refillIcon, serveIcon, recipeBook, satisfactionPanel);
         // root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
      	
      	
-        root.setStyle("-fx-background-color: #2C1810;");
+        root.setStyle("-fx-background-color: #C99394;");
         Scene scene = new Scene(root, 900, 1000);
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
