@@ -35,7 +35,7 @@ public class CafeSimulatorApp extends Application {
     
     private ImageView satisfactionView;
     private javafx.scene.layout.HBox spoonContainer;
-    private javafx.scene.control.Label patienceLabel;
+    //private javafx.scene.control.Label patienceLabel;
     private javafx.scene.control.Label orderLabel;
     private ProgressBar patienceBar;
     private javafx.scene.control.Label satisfactionLabel;
@@ -87,7 +87,7 @@ public class CafeSimulatorApp extends Application {
                 fadeIn.setOnFinished(ev -> {
                     drinkIcon.setVisible(true);
                     patienceBar.setVisible(true);
-                    patienceLabel.setVisible(true);
+                    //patienceLabel.setVisible(true);
                     spoonContainer.setVisible(true);
                 });
                 fadeIn.play();
@@ -152,7 +152,7 @@ public class CafeSimulatorApp extends Application {
                 }
             } 
 
-            patienceLabel.setText("Patience: " + current.getPatience());
+            //patienceLabel.setText("Patience: " + current.getPatience());
             double progress = (double) current.getPatience() / current.getMaxPatience();
             patienceBar.setProgress(progress);
 
@@ -165,7 +165,7 @@ public class CafeSimulatorApp extends Application {
             }
 
             patienceBar.setVisible(true);
-            patienceLabel.setVisible(true);
+           // patienceLabel.setVisible(true);
 
         } else {
         
@@ -173,7 +173,7 @@ public class CafeSimulatorApp extends Application {
             messageBubble.setVisible(false);
             drinkIcon.setVisible(false);
             patienceBar.setVisible(false);
-            patienceLabel.setVisible(false);
+           //patienceLabel.setVisible(false);
             orderLabel.setVisible(false);
             spoonContainer.setVisible(false);
         }
@@ -267,9 +267,9 @@ public class CafeSimulatorApp extends Application {
         errorLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: red; -fx-font-weight: bold;");
         errorLabel.setVisible(false);
 
-        patienceLabel = new javafx.scene.control.Label();
-        patienceLabel.setTranslateX(120);
-        patienceLabel.setTranslateY(420);
+        // = new javafx.scene.control.Label();
+        //patienceLabel.setTranslateX(120);
+        //patienceLabel.setTranslateY(420);
 
         final String[] playerRecipe = {""};
       
@@ -555,7 +555,7 @@ public class CafeSimulatorApp extends Application {
         root.getChildren().add(plant);
         root.getChildren().add(matchaView.getImageView());
         root.getChildren().add(matchaView.getProgressBar());
-        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, drinkIcon, patienceLabel, errorLabel, spoonContainer);
+        root.getChildren().addAll(customerSprite, orderLabel, patienceBar, messageBubble, drinkIcon, errorLabel, spoonContainer);
         
      // Create Image Buttons with matching sizes
         ImageView refillIcon = new ImageView(ImageLoader.load("refill.png", 195, 195));
@@ -629,7 +629,7 @@ public class CafeSimulatorApp extends Application {
                     });
                     drinkIcon.setVisible(false);
                     patienceBar.setVisible(false);
-                    patienceLabel.setVisible(false);
+                    //patienceLabel.setVisible(false);
                     spoonContainer.setVisible(false);
                     fadeOut.play();
                     bubbleFadeOut.play();
@@ -663,7 +663,7 @@ public class CafeSimulatorApp extends Application {
         // root.getChildren().addAll(espressoCount, milkCount, matchaCount, waterCount, sugarCount);
      	
      	
-        root.setStyle("-fx-background-color: #2E1A47;");
+        root.setStyle("-fx-background-color: #2C1810;");
         Scene scene = new Scene(root, 900, 1000);
         stage.setTitle("Cafe Simulator!");
         stage.setScene(scene);
