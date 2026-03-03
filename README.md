@@ -1,6 +1,6 @@
 # Cafe Simulator
 
-A JavaFX cafe management game written in Java. Serve customers, manage ingredient inventory, and match drink recipes before their patience runs out.
+A JavaFX cafe management game written in Java. Serve customers, manage ingredient inventory, and match drink recipes before their patience runs out!
 
 ## Gameplay
 
@@ -11,7 +11,7 @@ Customers walk in and place drink orders. Click ingredients in the correct combi
 - Ingredients deplete with use and must be refilled
 - Each customer has a patience bar that ticks down every second
 
-## Play here
+## Play Here
 https://anjuweecs.itch.io/beary-cozy-cafe
 
 
