@@ -11,6 +11,10 @@ Customers walk in and place drink orders. Click ingredients in the correct combi
 - Ingredients deplete with use and must be refilled
 - Each customer has a patience bar that ticks down every second
 
+## Play here
+https://anjuweecs.itch.io/beary-cozy-cafe
+
+
 ## Build from Source
 
 **Prerequisites:** Java 17+, JavaFX 21, Maven
@@ -19,9 +23,6 @@ git clone https://github.com/anjunthomas/cafe-simulator
 cd cafe-simulator
 mvn javafx:run
 ```
-
-## Play here
-https://anjuweecs.itch.io/beary-cozy-cafe
 
 ## License
 
