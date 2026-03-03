@@ -20,6 +20,9 @@ cd cafe-simulator
 mvn javafx:run
 ```
 
+## Play here
+https://anjuweecs.itch.io/beary-cozy-cafe
+
 ## License
 
 MIT
